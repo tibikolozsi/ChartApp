@@ -103,17 +103,15 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     
     
     func tapHandler(){
-        Logger.Log()
-        println("LineChartView.panHandler")
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
     }
     
     func panHandler(){
-        Logger.Log()
-        println()
-        
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
     }
     
     func initGestureRecognizers() {
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector(tapHandler()))
         self.tapGestureRecognizer.delegate = self
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector(panHandler()))
@@ -125,7 +123,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     }
     
     func refreshPoints() {
-        println("refresPoints")
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
         self.points = Array<CGPoint>()
         var step:CGFloat = CGFloat(self.frame.width)/CGFloat(self.values.count-1)
         for (index,value) in enumerate(values) {
@@ -137,8 +135,8 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     }
     
     required public init(coder aDecoder: NSCoder) {
-        println("LineChartView.init(coder:)")
         super.init(coder: aDecoder)
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
         self.initGestureRecognizers()
         self.bezierCurveIsEnabled = false
         let diff = self.frame.width / 10
@@ -151,8 +149,8 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     
     
     required override public init(frame: CGRect) {
-        println("LineChartView.init(frame:)")
         super.init(frame: frame)
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
         self.initGestureRecognizers()
         self.backgroundColor = UIColor.clearColor()
     }
