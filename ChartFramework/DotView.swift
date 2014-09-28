@@ -11,7 +11,11 @@ import UIKit
 class DotView: UIView {
 
     var shouldDisplayConstantly: Bool = true
-    var color: UIColor = UIColor.blueColor()
+    var color: UIColor = UIColor.blueColor() {
+        didSet{
+            self.setNeedsDisplay()
+        }
+    }
     var value: CGFloat = 0.0
     
     func commonInit() {

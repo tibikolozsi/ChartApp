@@ -102,19 +102,73 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     let frameOffset: CGFloat = 0.0
     
     
-    func tapHandler(){
+    // Line when touching
+    var touchLine: UIView = UIView()
+    var touchLineColor: UIColor = UIColor.grayColor()
+    var touchLineWidth: CGFloat = 1.0
+    
+    var closestDot:DotView!
+    var dots:Array<DotView> = Array<DotView>()
+    
+    var lineLayer:CALayer = CALayer()
+    
+    func closestDotFromTouchLine(line:UIView) -> DotView {
+        self.closestDot = self.dots.first
+        var closestDiff: CGFloat = self.frame.width*2.0
+        let lineXPos = line.frame.origin.x
+        for dot in self.dots {
+            var currentDif = fabs(dot.frame.origin.x - lineXPos)
+            if currentDif <= closestDiff{
+                closestDiff = currentDif
+                self.closestDot = dot
+            }
+        }
+        println(self.closestDot)
+        return self.closestDot
+    }
+    
+    func tapHandler(recognizer:UIPanGestureRecognizer){
         Logger.Log(className: NSStringFromClass(self.classForCoder))
     }
     
-    func panHandler(){
+    func panHandler(recognizer:UIPanGestureRecognizer){
         Logger.Log(className: NSStringFromClass(self.classForCoder))
+        
+        let translation = recognizer.locationInView(self.viewForBaselineLayout())
+        // To make sure the vertical line doesn't go beyond the frame of the graph.
+        if (!((translation.x + self.frame.origin.x) <= self.frame.origin.x) &&
+            !((translation.x + self.frame.origin.x) >= self.frame.origin.x + self.frame.size.width))
+        {
+            var origin = CGPoint(x: translation.x - self.touchLineWidth/2.0, y: 0.0)
+            var size = CGSize(width: self.touchLineWidth, height: self.frame.size.height)
+            self.touchLine.frame = CGRect(origin: origin, size: size)
+            self.touchLine.backgroundColor = UIColor.redColor()
+
+        }
+        self.touchLine.alpha = 1.0
+        if self.closestDot != nil {
+            self.closestDot.color = self.dotColor
+        }
+
+        self.closestDot = self.closestDotFromTouchLine(self.touchLine)
+        self.closestDot.color = UIColor.whiteColor()
+
+        
+        if (recognizer.state == UIGestureRecognizerState.Ended) {
+            UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: { () -> Void in
+                self.touchLine.alpha = 0.0
+                self.closestDot.color = self.dotColor
+                
+            }, completion: nil)
+            
+        }
     }
     
     func initGestureRecognizers() {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector(tapHandler()))
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapHandler:"))
         self.tapGestureRecognizer.delegate = self
-        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector(panHandler()))
+        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panHandler:"))
         self.panGestureRecognizer.delegate = self
         self.panGestureRecognizer.maximumNumberOfTouches = 1
         self.addGestureRecognizer(self.tapGestureRecognizer)
@@ -128,7 +182,6 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
         var step:CGFloat = CGFloat(self.frame.width)/CGFloat(self.values.count-1)
         for (index,value) in enumerate(values) {
             var pointToAdd = CGPoint(x: CGFloat(step)*CGFloat(index), y: value)
-            println("pointToAdd:\(pointToAdd)")
             self.points.append(pointToAdd)
         }
         self.setNeedsDisplay()
@@ -136,6 +189,9 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     
     required public init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.layer.addSublayer(self.lineLayer)
+        self.touchLine = UIView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
+        self.addSubview(self.touchLine)
         Logger.Log(className: NSStringFromClass(self.classForCoder))
         self.initGestureRecognizers()
         self.bezierCurveIsEnabled = false
@@ -150,12 +206,16 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     
     required override public init(frame: CGRect) {
         super.init(frame: frame)
+        self.layer.addSublayer(self.lineLayer)
+        self.touchLine = UIView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
+        self.addSubview(self.touchLine)
         Logger.Log(className: NSStringFromClass(self.classForCoder))
         self.initGestureRecognizers()
         self.backgroundColor = UIColor.clearColor()
     }
     
     func drawReferenceLines()  -> UIBezierPath {
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
         // Draw Reference Lines
         var referenceLinePath: UIBezierPath = UIBezierPath()
         referenceLinePath.lineCapStyle = kCGLineCapButt
@@ -239,7 +299,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
                 pathLayer.lineJoin = kCALineJoinBevel
                 pathLayer.lineCap = kCALineCapRound
                 self.animateForLayer(pathLayer, animationType:LineViewAnimationType.LineViewAnimationTypeDraw, isAnimatingReferenceLine:true)
-                self.layer.addSublayer(pathLayer)
+                self.lineLayer.addSublayer(pathLayer)
         }
         drawDots()
     }
@@ -352,6 +412,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     }
     
     func drawDots() {
+        self.dots.removeAll(keepCapacity: false)
         for point in points {
             var dot:DotView = DotView(frame: CGRect(x: 0, y: 0, width: self.dotSize, height: self.dotSize))
             dot.center = point
@@ -359,7 +420,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
             dot.value = point.y
             dot.color = self.dotColor
             self.addSubview(dot)
-            
+            self.dots.append(dot)
             UIView.animateWithDuration(2.0, animations: { () -> Void in
                 dot.alpha = 0.7
             })
@@ -368,7 +429,16 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     
     
     func eraseLineView() {
-        self.layer.sublayers = nil
+        self.lineLayer.sublayers = nil
+        for dot in self.dots {
+            dot.removeFromSuperview()
+        }
+    }
+    
+    // MARK: Gesture recognizer
+    public override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
+        return true
     }
 
 }
