@@ -16,7 +16,7 @@ enum LineViewAnimationType {
 
 let kDefaultNumberOfItems = 10;
 let kDefaultStep:CGFloat = 320.0/CGFloat(kDefaultNumberOfItems);
-let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
+let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
                                             CGPoint(x:1.0*kDefaultStep, y: 300),
                                             CGPoint(x:2.0*kDefaultStep, y: 40),
                                             CGPoint(x:3.0*kDefaultStep, y: 120),
@@ -28,7 +28,9 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
                                             CGPoint(x:9.0*kDefaultStep , y: 300)];
 
 
-@IBDesignable public class LineChartView: UIView, UIGestureRecognizerDelegate {
+
+
+@IBDesignable public class LineChartView: UIView, UIGestureRecognizerDelegate{
     // MARK: Inspectable properties
     
     // reference lines related properties
@@ -41,11 +43,15 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     @IBInspectable var lineWidth:CGFloat = 1.0
     @IBInspectable public var bezierCurveIsEnabled: Bool = true
     @IBInspectable var animationType: LineViewAnimationType = LineViewAnimationType.LineViewAnimationTypeDraw
-    @IBInspectable var animationTime: CGFloat = 0.0
+    @IBInspectable var animationTime: CGFloat = 0
     
     
-    let topColor: UIColor = UIColor.redColor()
-    let bottomColor: UIColor = UIColor.redColor()
+    @IBInspectable let topColor: UIColor = UIColor.redColor()
+    @IBInspectable let bottomColor: UIColor = UIColor.redColor()
+
+    @IBInspectable var dotSize:CGFloat = 5.0
+    @IBInspectable var dotColor:UIColor = UIColor.blueColor()
+
     let xAxisBackgroundColor: UIColor = UIColor.redColor()
     let xAxisBackgroundColorAlpha: CGFloat = 1.0
     
@@ -64,42 +70,17 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     var arrayOfVerticalLineReferencePoints: Array<CGFloat> = []
     var arrayOfHorizontalLineReferencePoints: Array<CGFloat> = []
     
-    @IBInspectable var dotSize:CGFloat = 5.0
-    @IBInspectable var dotColor:UIColor = UIColor.blueColor()
-    
-    var previousOrientaion: UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation;
-    
-    var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
-    var panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer()
-    
-    // Colors
-    //    let lineGradient: CGGradientRef
-    
-    
-    
-    
-    //----- ALPHA -----//
-    
-    /// The line alpha
-    
+   
     let topAlpha: CGFloat = 1.0
     let bottomAlpha: CGFloat = 1.0
     
-    //----- SIZE -----//
-    
-    /// The width of the line
-    
-    
-    //----- BEZIER CURVE -----//
-    
-    
-    //----- ANIMATION -----//
-    
-    
-    
-    
-    //----- FRAME -----//
     let frameOffset: CGFloat = 0.0
+
+    
+    // Gesture recognizers
+    var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
+    var panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer()
+    
     
     
     // Line when touching
@@ -112,6 +93,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     
     var lineLayer:CALayer = CALayer()
     
+
     func closestDotFromTouchLine(line:UIView) -> DotView {
         self.closestDot = self.dots.first
         var closestDiff: CGFloat = self.frame.width*2.0
@@ -190,8 +172,9 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     required public init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.layer.addSublayer(self.lineLayer)
-        self.touchLine = UIView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
-        self.addSubview(self.touchLine)
+        
+        addTouchLineToView()
+        
         Logger.Log(className: NSStringFromClass(self.classForCoder))
         self.initGestureRecognizers()
         self.bezierCurveIsEnabled = false
@@ -202,13 +185,19 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
             self.arrayOfVerticalLineReferencePoints.append(i)
         }
     }
-    
+
+    func addTouchLineToView()
+    {
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
+        self.touchLine = UIView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
+        self.addSubview(self.touchLine)
+    }
     
     required override public init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.addSublayer(self.lineLayer)
-        self.touchLine = UIView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
-        self.addSubview(self.touchLine)
+        addTouchLineToView()
+        
         Logger.Log(className: NSStringFromClass(self.classForCoder))
         self.initGestureRecognizers()
         self.backgroundColor = UIColor.clearColor()
@@ -267,13 +256,20 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     }
     
     func drawLines() -> UIBezierPath {
-                return drawLine()
+        return drawLine()
     }
     
     override public func drawRect(rect: CGRect)
     {
         eraseLineView()
         refreshPoints()
+//  TODO: fix it
+        var gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.frame
+        let arrayColors: NSArray = [self.topColor,self.bottomColor]
+        gradientLayer.colors = arrayColors
+        self.layer.addSublayer(gradientLayer)
+
         println("LineChartView.drawRect");
         println("brezier: \(self.bezierCurveIsEnabled)")
 
@@ -304,68 +300,49 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
         drawDots()
     }
     
-    func getCurvePoints(points: Array<CGPoint>, tension: Float = 0.5) -> Array<CGPoint> {
-        var modPoints = points
-        var curvePoints = Array<CGPoint>()
-        let segments = 16
-        if self.bezierCurveIsEnabled {
-            // The algorithm needs a previous and a next point so we need to copy first and last element
-            modPoints.insert(modPoints[0], atIndex: 0)
-            modPoints.append(modPoints.last!)
-
-            for var i:Int=1; i<modPoints.count-2; i++ {
-                for var t:Int=0; t<=segments; t++ {
-                    
-                    var currentPont = modPoints[i]
-                    var previousPoint = modPoints[i-1]
-                    var nextPoint = modPoints[i+1]
-                    var nextNextPoint = modPoints[i+2]
-                    
-                    // calculate tension vectors
-                    var t1x:CGFloat = (CGFloat(nextPoint.x) - CGFloat(previousPoint.x))*CGFloat(tension)
-                    var t2x:CGFloat = (CGFloat(nextNextPoint.x) - CGFloat(currentPont.x))*CGFloat(tension)
-                    
-                    var t1y:CGFloat = (CGFloat(nextPoint.y)-CGFloat(previousPoint.y))*CGFloat(tension)
-                    var t2y:CGFloat = (CGFloat(nextNextPoint.y)-CGFloat(currentPont.y))*CGFloat(tension)
-                    
-                    // calculate step
-                    var step:CGFloat = CGFloat(t) / CGFloat(segments)
-                    
-                    // calc cardinals
-                    var pow3:CGFloat = CGFloat(powf(Float(step), 3.0))
-                    var pow2:CGFloat = CGFloat(powf(Float(step), 2.0))
-                    
-                    var c1 =  2.0 * pow3 - 3.0 * pow2 + 1.0;
-                    var c2 = -2.0 * pow3 + 3.0 * pow2;
-                    var c3 = pow3 - 2.0 * pow2 + step;
-                    var c4 = pow3 - pow2;
-                
-                    // calculate x and y coords with common control vectors
-                    var x:CGFloat = c1 * currentPont.x + c2 * nextPoint.x + c3 * t1x + c4 * t2x;
-                    var y:CGFloat = c1 * currentPont.y + c2 * nextPoint.y + c3 * t1y + c4 * t2y;
-                    curvePoints.append(CGPoint(x:x, y:y))
-                }
-            }
-        } else {
-            for point in points {
-                curvePoints.append(point)
-            }
-            
-        }
-        return curvePoints
-    }
-    
     func drawLine() -> UIBezierPath {
         var linePath = UIBezierPath()
-        if(self.points.count > 2) {
-            var curvePoints = getCurvePoints(self.points, tension: 0.5)
-        
-
-        linePath.moveToPoint(curvePoints[0])
-        for p in curvePoints {
-            linePath.addLineToPoint(p)
+        var modPoints = self.points
+        if (self.points.count < 2) {
+            return linePath
         }
-            
+        modPoints.insert(points.first!, atIndex: 0)
+        modPoints.insert(points.last!, atIndex: points.count)
+        linePath.moveToPoint(points.first!)
+        for (index,point) in enumerate(modPoints) {
+            if (index >= 1 && index < modPoints.count - 2) {
+                var nextPoint:CGPoint = modPoints[index+1]
+                var secondNextPoint:CGPoint = modPoints[index+2]
+                var previousPoint:CGPoint = modPoints[index-1]
+
+                if index == 1 {
+                    previousPoint = CGPoint(x: point.x-(nextPoint.x-point.x), y: nextPoint.y)
+                }
+                if index == modPoints.count - 3 {
+                    var diff:CGFloat = point.x-previousPoint.x
+                    nextPoint = CGPoint(x: point.x+diff, y: nextPoint.y)
+                    secondNextPoint = CGPoint(x: point.x + diff * 2.0, y:nextPoint.y)
+                }
+
+                
+                var d1 = vectorLength(point - previousPoint)
+                var d2 = vectorLength(nextPoint - point)
+                var d3 = vectorLength(secondNextPoint - nextPoint)
+
+                let falpha:Float = Float(0.8)
+                var b1:CGPoint =  powf(Float(d1), Float(2.0)*falpha)*nextPoint
+                b1 = b1 - powf(Float(d2), Float(2.0)*falpha) * previousPoint
+                b1 = b1 + (2.0 * powf(Float(d1), Float(2.0)*falpha) + Float(3.0)*powf(Float(d1), falpha)*powf(Float(d2), falpha) + powf(Float(d2), 2.0*falpha)) * point
+                b1 = (1.0 / (3.0*powf(Float(d1), falpha)*(powf(Float(d1), falpha)+powf(Float(d2), falpha)))) * b1
+                
+                var b2 = powf(Float(d3), 2.0*falpha) * point
+                b2 = b2 - powf(Float(d2), 2.0*falpha) * secondNextPoint
+                b2 = b2 + (2.0*powf(Float(d3), 2.0*falpha) + 3.0*powf(Float(d3), falpha)*powf(Float(d2), falpha) + powf(Float(d2), 2.0*falpha)) * nextPoint
+                b2 = (1.0 / (3.0*powf(Float(d3), falpha)*(powf(Float(d3), falpha)+powf(Float(d2), falpha)))) * b2
+                println("curve:\(nextPoint) controlPoint1:\(b1) controlPoint2:\(b2)")
+
+                linePath.addCurveToPoint(nextPoint, controlPoint1: b1, controlPoint2: b2)
+            }
         }
         return linePath
     }
@@ -399,17 +376,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
     }
 
     
-    public override func prepareForInterfaceBuilder() {
-        // provide sample data for Interface Builder
-        let diff = self.frame.width / 10
-        
-        for var i:CGFloat=0; i<=self.frame.width; i+=diff {
-            self.arrayOfHorizontalLineReferencePoints.append(i)
-            self.arrayOfVerticalLineReferencePoints.append(i)
-        }
-        self.values = [0,100,30,180,10,200]
-        drawDots()
-    }
+
     
     func drawDots() {
         self.dots.removeAll(keepCapacity: false)
@@ -440,5 +407,44 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:0.0, y:100),
         Logger.Log(className: NSStringFromClass(self.classForCoder))
         return true
     }
-
+    
+    public func vectorLength(point:CGPoint) -> CGFloat {
+        return sqrt(point * point)
+    }
+    
+    public override func prepareForInterfaceBuilder() {
+        // provide sample data for Interface Builder
+        let diff = self.frame.width / 10
+        
+        for var i:CGFloat=0; i<=self.frame.width; i+=diff {
+            self.arrayOfHorizontalLineReferencePoints.append(i)
+            self.arrayOfVerticalLineReferencePoints.append(i)
+        }
+        self.values = [0,100,30,180,10,200]
+        drawDots()
+    }
 }
+
+public func -(lhs: CGPoint, rhs:CGPoint) -> CGPoint {
+    return CGPoint(x:lhs.x-rhs.x,y:lhs.y-rhs.y)
+}
+
+public func +(left: CGPoint, right:CGPoint) -> CGPoint {
+    return CGPoint(x:left.x+right.x,y:left.y+right.y)
+}
+
+public func *(left: CGPoint, right:CGPoint) -> CGFloat {
+    return CGFloat(left.x * right.x + left.y * right.y)
+}
+
+public func *(lhs: CGFloat, rhs:CGPoint) -> CGPoint {
+    return CGPoint(x:lhs * rhs.x,y: lhs * rhs.y)
+}
+public func *(lhs: Float, rhs:CGPoint) -> CGPoint {
+    return CGPoint(x:CGFloat(lhs) * rhs.x,y: CGFloat(lhs) * rhs.y)
+}
+
+
+
+
+
