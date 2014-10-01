@@ -92,12 +92,15 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
     var dots:Array<DotView> = Array<DotView>()
     
     var lineLayer:CALayer = CALayer()
+    var referenceLineLayer:CALayer = CALayer()
     
     // MARK: init methods
     
     required override public init(frame: CGRect) {
         super.init(frame: frame)
+        self.layer.addSublayer(self.referenceLineLayer)
         self.layer.addSublayer(self.lineLayer)
+
         addTouchLineToView()
         
         Logger.Log(className: NSStringFromClass(self.classForCoder))
@@ -140,17 +143,11 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
     {
         eraseLineView()
         refreshPoints()
-//        //  TODO: fix it
-//        var gradientLayer = CAGradientLayer()
-//        gradientLayer.frame = self.frame
-//        let arrayColors: NSArray = [self.topColor,self.bottomColor]
-//        gradientLayer.colors = arrayColors
-//        self.layer.addSublayer(gradientLayer)
-        
+       
         println("LineChartView.drawRect");
         println("brezier: \(self.bezierCurveIsEnabled)")
         
-        var referenceLinesPath = self.drawReferenceLines()
+        var referenceLinesShapeLayer = self.drawReferenceLines()
         var line = self.drawLines()
         
         if self.animationTime == 0 {
@@ -159,8 +156,8 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
             line.strokeWithBlendMode(kCGBlendModeNormal, alpha: CGFloat(self.lineAlpha))
             
             if self.enableReferenceLine {
-                referenceLinesPath.lineWidth = self.lineWidth/2.0
-                referenceLinesPath.strokeWithBlendMode(kCGBlendModeNormal, alpha: CGFloat(self.lineAlpha/2.0))
+                referenceLinesShapeLayer.lineWidth = self.lineWidth/2.0
+//                referenceLinesShape.strokeWithBlendMode(kCGBlendModeNormal, alpha: CGFloat(self.lineAlpha/2.0))
             }
         } else {
             var pathLayer: CAShapeLayer = CAShapeLayer()
@@ -172,7 +169,9 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
             pathLayer.lineJoin = kCALineJoinBevel
             pathLayer.lineCap = kCALineCapRound
             self.animateForLayer(pathLayer, animationType:LineViewAnimationType.LineViewAnimationTypeDraw, isAnimatingReferenceLine:true)
+            self.animateForLayer(referenceLinesShapeLayer, animationType: LineViewAnimationType.LineViewAnimationTypeDraw, isAnimatingReferenceLine: true)
             self.lineLayer.addSublayer(pathLayer)
+            self.lineLayer.addSublayer(referenceLinesShapeLayer)
         }
         drawDots()
     }
@@ -183,9 +182,11 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
         if (self.points.count < 2) {
             return linePath
         }
+        linePath.moveToPoint(points.first!)
+        if self.bezierCurveIsEnabled {
         modPoints.insert(points.first!, atIndex: 0)
         modPoints.insert(points.last!, atIndex: points.count)
-        linePath.moveToPoint(points.first!)
+
         for (index,point) in enumerate(modPoints) {
             if (index >= 1 && index < modPoints.count - 2) {
                 var nextPoint:CGPoint = modPoints[index+1]
@@ -221,33 +222,47 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
                 linePath.addCurveToPoint(nextPoint, controlPoint1: b1, controlPoint2: b2)
             }
         }
+        } else {
+            for point in self.points {
+                linePath.addLineToPoint(point)
+            }
+        }
         return linePath
     }
-    
-    func drawReferenceLines()  -> UIBezierPath {
+
+    // Draw Reference Lines
+    func drawReferenceLines()  -> CAShapeLayer {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        // Draw Reference Lines
-        var referenceLinePath: UIBezierPath = UIBezierPath()
-        referenceLinePath.lineCapStyle = kCGLineCapButt
-        referenceLinePath.lineWidth = 0.7
-        
+        var referenceLinePathLayer = CAShapeLayer()
         if (self.enableReferenceLine) {
-            for pointX in self.arrayOfVerticalLineReferencePoints {
-                var initialPoint:CGPoint = CGPointMake(pointX, self.frame.size.height - self.frameOffset)
-                var finalPoint:CGPoint = CGPointMake(pointX, 0)
+            // customize path
+            var referenceLinePath: UIBezierPath = UIBezierPath()
+            referenceLinePath.lineCapStyle = kCGLineCapButt
+            referenceLinePath.lineWidth = 0.1
+            referenceLinePath.strokeWithBlendMode(kCGBlendModeNormal, alpha: 1.0)
+            
+            
+            let diff:Int = 2 // step for drawing reference lines if we dont need them all
+            // draw vertical reference lines
+            for var i = 0; i < self.points.count; i+=diff {
+                let pointX = self.points[i].x
+                let initialPoint:CGPoint = CGPointMake(pointX, self.frame.size.height - self.frameOffset)
+                let finalPoint:CGPoint = CGPointMake(pointX, 0)
                 referenceLinePath.moveToPoint(initialPoint)
                 referenceLinePath.addLineToPoint(finalPoint)
             }
             
-            
-            
-            if (self.arrayOfHorizontalLineReferencePoints.count > 0) {
-                for pointY in self.arrayOfHorizontalLineReferencePoints {
-                    var initialPoint:CGPoint = CGPointMake(0, pointY)
-                    var finalPoint:CGPoint = CGPointMake(self.frame.size.width, pointY)
-                    referenceLinePath.moveToPoint(initialPoint)
-                    referenceLinePath.addLineToPoint(finalPoint)
-                }
+            // sort points for drawing every diff. lines (eg. only 2nd lines)
+            let sortedPoints = sorted(self.points, { (p1:CGPoint, p2:CGPoint) -> Bool in
+                return p1.y > p2.y
+            })
+            // draw horizontal lines
+            for var i = 0; i < sortedPoints.count; i+=diff {
+                let pointY = sortedPoints[i].y
+                var initialPoint:CGPoint = CGPointMake(0, pointY)
+                var finalPoint:CGPoint = CGPointMake(self.frame.size.width, pointY)
+                referenceLinePath.moveToPoint(initialPoint)
+                referenceLinePath.addLineToPoint(finalPoint)
             }
             
             if (self.enableReferenceFrame) {
@@ -259,21 +274,17 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
             }
             referenceLinePath.closePath()
             
-            referenceLinePath.lineWidth = self.lineWidth / 2
-            referenceLinePath.strokeWithBlendMode(kCGBlendModeNormal, alpha: 1.0)
-            
-            if self.enableReferenceLine {
-                var referenceLinePathLayer = CAShapeLayer()
-                referenceLinePathLayer.frame = self.bounds
-                referenceLinePathLayer.path = referenceLinePath.CGPath
-                referenceLinePathLayer.opacity = self.lineAlpha/2.0
-                referenceLinePathLayer.strokeColor = self.lineColor.CGColor
-                referenceLinePathLayer.fillColor = nil
-                referenceLinePathLayer.lineWidth = self.lineWidth/2
-                self.layer.addSublayer(referenceLinePathLayer)
-            }
+            // add path to self.layer
+            referenceLinePathLayer.frame = self.bounds
+            referenceLinePathLayer.path = referenceLinePath.CGPath
+            referenceLinePathLayer.opacity = self.lineAlpha/2.0
+            referenceLinePathLayer.strokeColor = self.lineColor.CGColor
+            referenceLinePathLayer.fillColor = nil
+            referenceLinePathLayer.lineWidth = 0.3
+            self.layer.addSublayer(referenceLinePathLayer)
+//            self.layer.addSublayer(referenceLinePathLayer)
         }
-        return referenceLinePath
+        return referenceLinePathLayer
     }
     
     func drawLines() -> UIBezierPath {

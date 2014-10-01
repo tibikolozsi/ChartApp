@@ -36,9 +36,14 @@ class ViewController: UIViewController {
     
     func addRandomValueToLine() {
         let lineChartViewHeight: UInt32 = UInt32(self.lineChartView.frame.height)
+        println(self.lineChartView.frame.height)
         var randomValue: CGFloat = CGFloat(arc4random_uniform(lineChartViewHeight))
         println("added value: \(randomValue)")
         self.lineChartView.addValueToLine(randomValue)
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.BlackOpaque
     }
 
 }
