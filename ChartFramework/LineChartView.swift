@@ -80,11 +80,12 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
     // Gesture recognizers
     var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     var panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer()
+    var doubleTapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     
     
     
     // Line when touching
-    var touchLine: UIView = UIView()
+    var touchLine: InterractionView?
     var touchLineColor: UIColor = UIColor.grayColor()
     var touchLineWidth: CGFloat = 1.0
     
@@ -134,6 +135,9 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
         self.panGestureRecognizer.maximumNumberOfTouches = 1
         self.addGestureRecognizer(self.tapGestureRecognizer)
         self.addGestureRecognizer(self.panGestureRecognizer)
+        doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("doubleTapHandler:"))
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        self.addGestureRecognizer(self.doubleTapGestureRecognizer)
         
     }
     
@@ -207,7 +211,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
                 var d2 = vectorLength(nextPoint - point)
                 var d3 = vectorLength(secondNextPoint - nextPoint)
                 
-                let falpha:Float = Float(0.8)
+                let falpha:Float = Float(0.5)
                 var b1:CGPoint =  powf(Float(d1), Float(2.0)*falpha)*nextPoint
                 b1 = b1 - powf(Float(d2), Float(2.0)*falpha) * previousPoint
                 b1 = b1 + (2.0 * powf(Float(d1), Float(2.0)*falpha) + Float(3.0)*powf(Float(d1), falpha)*powf(Float(d2), falpha) + powf(Float(d2), 2.0*falpha)) * point
@@ -318,8 +322,9 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
     func addTouchLineToView()
     {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        self.touchLine = UIView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
-        self.addSubview(self.touchLine)
+//        self.touchLine = UIView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
+        self.touchLine = InterractionView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
+        self.addSubview(self.touchLine!)
     }
 
     
@@ -364,7 +369,13 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
         self.values.append(value)
         self.setNeedsDisplay()
     }
-
+    
+    func addRandomValueToLine() {
+        let lineChartViewHeight: UInt32 = UInt32(self.frame.height)
+        var randomValue: CGFloat = CGFloat(arc4random_uniform(lineChartViewHeight))
+        println("added value: \(randomValue)")
+        self.addValueToLine(randomValue)
+    }
     
     // MARK: Gesture recognizer handlers
     
@@ -372,8 +383,21 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
         Logger.Log(className: NSStringFromClass(self.classForCoder))
     }
     
+    func doubleTapHandler(recognizer:UIPanGestureRecognizer){
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
+        addRandomValueToLine()
+    }
+    
     func panHandler(recognizer:UIPanGestureRecognizer){
         Logger.Log(className: NSStringFromClass(self.classForCoder))
+        
+        self.touchLine!.alpha = 1.0
+        if self.closestDot != nil {
+            self.closestDot.color = self.dotColor
+        }
+        
+        self.closestDot = self.closestDotFromTouchLine(self.touchLine!)
+        self.closestDot.color = UIColor.whiteColor()
         
         let translation = recognizer.locationInView(self.viewForBaselineLayout())
         // To make sure the vertical line doesn't go beyond the frame of the graph.
@@ -381,23 +405,23 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
             !((translation.x + self.frame.origin.x) >= self.frame.origin.x + self.frame.size.width))
         {
             var origin = CGPoint(x: translation.x - self.touchLineWidth/2.0, y: 0.0)
-            var size = CGSize(width: self.touchLineWidth, height: self.frame.size.height)
-            self.touchLine.frame = CGRect(origin: origin, size: size)
-            self.touchLine.backgroundColor = UIColor.redColor()
+//            var size = CGSize(width: self.touchLineWidth, height: self.frame.size.height)
+            var frame = self.touchLine!.frame
+            frame.size.height = self.frame.size.height
+            frame.origin = origin
+            self.touchLine?.frame = frame
+            self.touchLine?.center.x = translation.x
+            self.touchLine?.pin.frame.origin.y = self.closestDot.frame.origin.y
+            self.touchLine?.text = closestDot.value.description
+//            self.touchLine!.backgroundColor = UIColor.redColor()
             
         }
-        self.touchLine.alpha = 1.0
-        if self.closestDot != nil {
-            self.closestDot.color = self.dotColor
-        }
-        
-        self.closestDot = self.closestDotFromTouchLine(self.touchLine)
-        self.closestDot.color = UIColor.whiteColor()
+
         
         
         if (recognizer.state == UIGestureRecognizerState.Ended) {
             UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: { () -> Void in
-                self.touchLine.alpha = 0.0
+                self.touchLine!.alpha = 0.0
                 self.closestDot.color = self.dotColor
                 
                 }, completion: nil)
