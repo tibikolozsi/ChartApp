@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var lineChartView: LineChartView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        for i in 1...10 {
+        for i in 1...50 {
             addRandomValueToLine()
         }
         self.lineChartView.setNeedsDisplay()
@@ -35,9 +35,9 @@ class ViewController: UIViewController {
     }
     
     func addRandomValueToLine() {
-        let lineChartViewHeight: UInt32 = UInt32(self.lineChartView.frame.height)
+        let lineChartViewHeight: UInt32 = 4000
         println(self.lineChartView.frame.height)
-        var randomValue: CGFloat = CGFloat(arc4random_uniform(lineChartViewHeight))
+        var randomValue: Float = Float(arc4random_uniform(lineChartViewHeight))
         println("added value: \(randomValue)")
         self.lineChartView.addValueToLine(randomValue)
     }

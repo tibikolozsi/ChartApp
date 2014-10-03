@@ -16,7 +16,7 @@ class DotView: UIView {
             self.setNeedsDisplay()
         }
     }
-    var value: CGFloat = 0.0
+    var value: Float = 0.0
     
     func commonInit() {
         self.backgroundColor = UIColor.clearColor()
