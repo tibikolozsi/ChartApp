@@ -30,7 +30,8 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
 
 
 
-@IBDesignable public class LineChartView: UIView, UIGestureRecognizerDelegate{
+//@IBDesignable
+public class LineChartView: UIView, UIGestureRecognizerDelegate{
     // MARK: Inspectable properties
     
     // reference lines related properties
@@ -110,6 +111,8 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
         }
     }
     
+    var actualHeight:CGFloat!
+    
     // MARK: init methods
     
     required override public init(frame: CGRect) {
@@ -136,6 +139,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
     func initAll() {
         self.initLayers()
         self.initGestureRecognizers()
+        self.actualHeight = self.frame.size.height
     }
     
     func initLayers() {
@@ -214,7 +218,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
             // draw vertical reference lines
             for var i = 0; i < self.points.count; i+=diff {
                 let pointX = self.points[i].position.x
-                let initialPoint:CGPoint = CGPointMake(pointX, self.frame.size.height - self.frameOffset)
+                let initialPoint:CGPoint = CGPointMake(pointX, self.actualHeight - self.frameOffset)
                 let finalPoint:CGPoint = CGPointMake(pointX, 0)
                 referenceLinePath.moveToPoint(initialPoint)
                 referenceLinePath.addLineToPoint(finalPoint)
@@ -234,10 +238,10 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
             }
             
             if (self.enableReferenceFrame) {
-                referenceLinePath.moveToPoint(CGPointMake(0, self.frame.size.height - self.frameOffset))
-                referenceLinePath.addLineToPoint(CGPointMake(self.frame.size.width, self.frame.size.height - self.frameOffset))
+                referenceLinePath.moveToPoint(CGPointMake(0, self.actualHeight - self.frameOffset))
+                referenceLinePath.addLineToPoint(CGPointMake(self.frame.size.width, self.actualHeight - self.frameOffset))
                 
-                referenceLinePath.moveToPoint(CGPointMake(0+self.lineWidth/4, self.frame.size.height - self.frameOffset))
+                referenceLinePath.moveToPoint(CGPointMake(0+self.lineWidth/4, self.actualHeight - self.frameOffset))
                 referenceLinePath.addLineToPoint(CGPointMake(0+self.lineWidth/4, 0))
             }
             referenceLinePath.closePath()
@@ -294,7 +298,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
         let oldMax:Float = Float(self.maxValue)
         let newMargin:Float = 10.0
         let newMin:Float = Float(0.0) + newMargin
-        let newMax:Float = Float(self.frame.size.height) - newMargin
+        let newMax:Float = Float(self.actualHeight) - newMargin
         var oldRange:Float = Float(oldMax) - Float(oldMin)
         let newRange:Float = newMax - newMin
         self.points = Array<LinePoint>()
@@ -385,7 +389,6 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
             !((translation.x + self.frame.origin.x) >= self.frame.origin.x + self.frame.size.width))
         {
             var origin = CGPoint(x: translation.x - self.touchLineWidth/2.0, y: 0.0)
-//            var size = CGSize(width: self.touchLineWidth, height: self.frame.size.height)
             var frame = self.touchLine!.frame
             frame.size.height = self.frame.size.height
             frame.origin = origin

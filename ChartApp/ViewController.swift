@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var lineChartView: LineChartView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        for i in 1...50 {
+        for i in 1...5 {
             addRandomValueToLine()
         }
         self.lineChartView.setNeedsDisplay()
