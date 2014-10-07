@@ -111,7 +111,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         }
     }
     
-    var actualHeight:CGFloat!
+    var lineView:UIView!
     
     // MARK: init methods
     
@@ -119,7 +119,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         super.init(frame: frame)
         self.initAll()
         
-        addTouchLineToView()
+
         
 
         self.backgroundColor = UIColor.clearColor()
@@ -129,22 +129,35 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         super.init(coder: aDecoder)
         self.initAll()
         
-        addTouchLineToView()
-        
-        
         
         self.bezierCurveIsEnabled = false
     }
+
+    func addView() {
+        self.lineView = UIView()
+        
+        self.lineView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(self.lineView)
+        
+        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Width, multiplier: 0.9, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Height, multiplier: 0.9, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
+        
+        self.layoutIfNeeded()
+
+    }
     
     func initAll() {
+        self.addView()
         self.initLayers()
         self.initGestureRecognizers()
-        self.actualHeight = self.frame.size.height
+        self.addTouchLineToView()
     }
     
     func initLayers() {
-        self.layer.addSublayer(self.referenceLineLayer)
-        self.layer.addSublayer(self.lineLayer)
+        self.lineView.layer.addSublayer(self.referenceLineLayer)
+        self.lineView.layer.addSublayer(self.lineLayer)
     }
     
     func initGestureRecognizers() {
@@ -154,8 +167,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panHandler:"))
         self.panGestureRecognizer.delegate = self
         self.panGestureRecognizer.maximumNumberOfTouches = 1
-        self.addGestureRecognizer(self.tapGestureRecognizer)
-        self.addGestureRecognizer(self.panGestureRecognizer)
+        self.lineView.addGestureRecognizer(self.tapGestureRecognizer)
+        self.lineView.addGestureRecognizer(self.panGestureRecognizer)
         doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("doubleTapHandler:"))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
         self.addGestureRecognizer(self.doubleTapGestureRecognizer)
@@ -186,7 +199,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             }
         } else {
             var pathLayer: CAShapeLayer = CAShapeLayer()
-            pathLayer.frame = self.bounds
+            pathLayer.frame.size = self.lineView.frame.size
             pathLayer.path = line.path.CGPath
             pathLayer.strokeColor = self.lineColor.CGColor
             pathLayer.fillColor = nil
@@ -218,7 +231,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             // draw vertical reference lines
             for var i = 0; i < self.points.count; i+=diff {
                 let pointX = self.points[i].position.x
-                let initialPoint:CGPoint = CGPointMake(pointX, self.actualHeight - self.frameOffset)
+                let initialPoint:CGPoint = CGPointMake(pointX, self.lineView.frame.size.height - self.frameOffset)
                 let finalPoint:CGPoint = CGPointMake(pointX, 0)
                 referenceLinePath.moveToPoint(initialPoint)
                 referenceLinePath.addLineToPoint(finalPoint)
@@ -232,22 +245,22 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             for var i = 0; i < sortedPoints.count; i+=diff {
                 let pointY = sortedPoints[i].position.y
                 var initialPoint:CGPoint = CGPointMake(0, pointY)
-                var finalPoint:CGPoint = CGPointMake(self.frame.size.width, pointY)
+                var finalPoint:CGPoint = CGPointMake(self.lineView.frame.size.width, pointY)
                 referenceLinePath.moveToPoint(initialPoint)
                 referenceLinePath.addLineToPoint(finalPoint)
             }
             
             if (self.enableReferenceFrame) {
-                referenceLinePath.moveToPoint(CGPointMake(0, self.actualHeight - self.frameOffset))
-                referenceLinePath.addLineToPoint(CGPointMake(self.frame.size.width, self.actualHeight - self.frameOffset))
+                referenceLinePath.moveToPoint(CGPointMake(0, self.lineView.frame.size.height - self.frameOffset))
+                referenceLinePath.addLineToPoint(CGPointMake(self.lineView.frame.size.width, self.lineView.frame.size.height - self.frameOffset))
                 
-                referenceLinePath.moveToPoint(CGPointMake(0+self.lineWidth/4, self.actualHeight - self.frameOffset))
+                referenceLinePath.moveToPoint(CGPointMake(0+self.lineWidth/4, self.lineView.frame.size.height - self.frameOffset))
                 referenceLinePath.addLineToPoint(CGPointMake(0+self.lineWidth/4, 0))
             }
             referenceLinePath.closePath()
             
             // add path to self.layer
-            referenceLinePathLayer.frame = self.bounds
+            referenceLinePathLayer.frame.size = self.lineView.frame.size
             referenceLinePathLayer.path = referenceLinePath.CGPath
             referenceLinePathLayer.opacity = self.lineAlpha/2.0
             referenceLinePathLayer.strokeColor = self.lineColor.CGColor
@@ -267,7 +280,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             dot.alpha = 0.0
             dot.value = point.value
             dot.color = self.dotColor
-            self.addSubview(dot)
+            self.lineView.addSubview(dot)
             self.dots.append(dot)
             UIView.animateWithDuration(2.0, animations: { () -> Void in
                 dot.alpha = 0.7
@@ -286,9 +299,9 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     func addTouchLineToView()
     {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        self.touchLine = InterractionView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.frame.size.height))
+        self.touchLine = InterractionView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.lineView.frame.size.height))
         self.touchLine?.alpha = 0
-        self.addSubview(self.touchLine!)
+        self.lineView.addSubview(self.touchLine!)
     }
 
     
@@ -298,11 +311,11 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         let oldMax:Float = Float(self.maxValue)
         let newMargin:Float = 10.0
         let newMin:Float = Float(0.0) + newMargin
-        let newMax:Float = Float(self.actualHeight) - newMargin
+        let newMax:Float = Float(self.lineView.frame.size.height) - newMargin
         var oldRange:Float = Float(oldMax) - Float(oldMin)
         let newRange:Float = newMax - newMin
         self.points = Array<LinePoint>()
-        var step:CGFloat = CGFloat(self.frame.width)/CGFloat(self.values.count-1)
+        var step:CGFloat = CGFloat(self.lineView.frame.width)/CGFloat(self.values.count-1)
         for (index,value) in enumerate(values) {
             var newValue:Float = newMax-(((Float(value) - Float(oldMin))*Float(newRange)) / Float(oldRange)) + Float(newMin)
             var pointToAdd = LinePoint(value: value, position: CGPoint(x: CGFloat(step)*CGFloat(index), y: CGFloat(newValue)))
@@ -355,7 +368,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     }
     
     func addRandomValueToLine() {
-        let lineChartViewHeight: UInt32 = UInt32(self.frame.height)
         var randomValue: Float = Float(arc4random_uniform(2000))
         println("added value: \(randomValue)")
         self.addValueToLine(randomValue)
@@ -383,19 +395,19 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         self.closestDot = self.closestDotFromTouchLine(self.touchLine!)
         self.closestDot.color = UIColor.whiteColor()
         
-        let translation = recognizer.locationInView(self.viewForBaselineLayout())
+        let translation = recognizer.locationInView(self.lineView.viewForBaselineLayout())
         // To make sure the vertical line doesn't go beyond the frame of the graph.
-        if (!((translation.x + self.frame.origin.x) <= self.frame.origin.x) &&
-            !((translation.x + self.frame.origin.x) >= self.frame.origin.x + self.frame.size.width))
+        if (!((translation.x + self.lineView.frame.origin.x) <= self.lineView.frame.origin.x) &&
+            !((translation.x + self.lineView.frame.origin.x) >= self.lineView.frame.origin.x + self.lineView.frame.size.width))
         {
             var origin = CGPoint(x: translation.x - self.touchLineWidth/2.0, y: 0.0)
             var frame = self.touchLine!.frame
-            frame.size.height = self.frame.size.height
             frame.origin = origin
             self.touchLine?.frame = frame
             self.touchLine?.center.x = translation.x
             self.touchLine?.pin.center.y = self.closestDot.center.y
             self.touchLine?.text = closestDot.value.description
+            self.touchLine?.line.frame.size.height = self.lineView.frame.size.height
 //            self.touchLine!.backgroundColor = UIColor.redColor()
             
         }
@@ -414,7 +426,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     func closestDotFromTouchLine(line:UIView) -> DotView {
         self.closestDot = self.dots.first
-        var closestDiff: CGFloat = self.frame.width*2.0
+        var closestDiff: CGFloat = self.lineView.frame.width*2.0
         let lineXPos = line.frame.origin.x
         for dot in self.dots {
             var currentDif = fabs(dot.frame.origin.x - lineXPos)
@@ -442,6 +454,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         self.values = [0,100,30,180,10,200]
         drawDots()
     }
+    
+    
 }
 
 

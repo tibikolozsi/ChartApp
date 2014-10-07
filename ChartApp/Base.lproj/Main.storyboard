@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="khu-BV-5BX" customClass="LineChartView" customModule="ChartFramework">
-                                <rect key="frame" x="10" y="44" width="460" height="266"/>
+                                <rect key="frame" x="0.0" y="44" width="480" height="276"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="enableReferenceLine" value="YES"/>
@@ -66,13 +66,13 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="khu-BV-5BX" secondAttribute="trailing" id="5m2-ri-H1A"/>
+                            <constraint firstAttribute="bottom" secondItem="khu-BV-5BX" secondAttribute="bottom" id="7dZ-YX-BVi"/>
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="9nc-8u-b3n"/>
-                            <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="J3p-7Z-lqN"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Nvw-tz-Vik"/>
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="O7M-p5-nBt"/>
-                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="44" id="SVh-Pa-0o7"/>
-                            <constraint firstAttribute="trailing" secondItem="khu-BV-5BX" secondAttribute="trailing" constant="10" id="T3k-e6-viP"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="44" id="tqh-xa-Dey"/>
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="vOD-Bj-Vp1"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="khu-BV-5BX" secondAttribute="bottom" constant="10" id="wmy-TS-7Kc"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>

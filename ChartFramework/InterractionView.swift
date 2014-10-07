@@ -36,6 +36,9 @@ public class InterractionView: UIView {
 
         self.addSubview(self.line)
 
+        self.addConstraint(NSLayoutConstraint(item: self.line, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0))
+        self.layoutIfNeeded()
+
         self.pin.color = UIColor.blueColor()
         self.pin.center.x = self.line.center.x
         self.addSubview(self.pin)
