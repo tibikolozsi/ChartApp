@@ -30,9 +30,10 @@ public class InterractionView: UIView {
         Logger.Log(className: "InterractionView")
         self.pin = DotView(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
         super.init(frame: frame)
-        self.line = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: self.frame.height))
-        self.line.backgroundColor = UIColor.darkGrayColor()
-        self.line.alpha = 0.5
+        self.backgroundColor = UIColor.clearColor()
+        self.line = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: self.frame.height))
+        self.line.backgroundColor = UIColor.whiteColor()
+        self.line.alpha = 1
 
         self.addSubview(self.line)
 

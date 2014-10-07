@@ -60,7 +60,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     let xAxisBackgroundColor: UIColor = UIColor.redColor()
     let xAxisBackgroundColorAlpha: CGFloat = 1.0
     
-    
+    let referenceLineColor = UIColor.blackColor()
     
     let startPoint: CGPoint = CGPointMake(0, 0)
     let endPoint: CGPoint = CGPointMake(0, 0)
@@ -72,10 +72,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         }
     }
     
-//    var arrayOfVerticalLineReferencePoints: Array<CGFloat> = []
-//    var arrayOfHorizontalLineReferencePoints: Array<CGFloat> = []
-    
-   
     let topAlpha: CGFloat = 1.0
     let bottomAlpha: CGFloat = 1.0
     
@@ -98,7 +94,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     var dots:Array<DotView> = Array<DotView>()
     
     var lineLayer:CALayer = CALayer()
-    var referenceLineLayer:CALayer = CALayer()
     
     var maxValue:Float = 0.0
     var minValue:Float = 0.0
@@ -156,7 +151,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     }
     
     func initLayers() {
-        self.lineView.layer.addSublayer(self.referenceLineLayer)
         self.lineView.layer.addSublayer(self.lineLayer)
     }
     
@@ -250,23 +244,22 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 referenceLinePath.addLineToPoint(finalPoint)
             }
             
-            if (self.enableReferenceFrame) {
-                referenceLinePath.moveToPoint(CGPointMake(0, self.lineView.frame.size.height - self.frameOffset))
-                referenceLinePath.addLineToPoint(CGPointMake(self.lineView.frame.size.width, self.lineView.frame.size.height - self.frameOffset))
-                
-                referenceLinePath.moveToPoint(CGPointMake(0+self.lineWidth/4, self.lineView.frame.size.height - self.frameOffset))
-                referenceLinePath.addLineToPoint(CGPointMake(0+self.lineWidth/4, 0))
-            }
+//            if (self.enableReferenceFrame) {
+//                referenceLinePath.moveToPoint(CGPointMake(0, self.lineView.frame.size.height - self.frameOffset))
+//                referenceLinePath.addLineToPoint(CGPointMake(self.lineView.frame.size.width, self.lineView.frame.size.height - self.frameOffset))
+//                
+//                referenceLinePath.moveToPoint(CGPointMake(0+self.lineWidth/4, self.lineView.frame.size.height - self.frameOffset))
+//                referenceLinePath.addLineToPoint(CGPointMake(0+self.lineWidth/4, 0))
+//            }
             referenceLinePath.closePath()
             
             // add path to self.layer
             referenceLinePathLayer.frame.size = self.lineView.frame.size
             referenceLinePathLayer.path = referenceLinePath.CGPath
             referenceLinePathLayer.opacity = self.lineAlpha/2.0
-            referenceLinePathLayer.strokeColor = self.lineColor.CGColor
+            referenceLinePathLayer.strokeColor = self.referenceLineColor.CGColor
             referenceLinePathLayer.fillColor = nil
             referenceLinePathLayer.lineWidth = 0.3
-            self.layer.addSublayer(referenceLinePathLayer)
         }
         return referenceLinePathLayer
     }

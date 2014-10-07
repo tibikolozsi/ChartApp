@@ -11,7 +11,7 @@ import UIKit
 class DotView: UIView {
 
     var shouldDisplayConstantly: Bool = true
-    var color: UIColor = UIColor.blueColor() {
+    var color: UIColor = UIColor.whiteColor(){
         didSet{
             self.setNeedsDisplay()
         }
