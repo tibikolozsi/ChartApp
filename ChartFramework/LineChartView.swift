@@ -31,7 +31,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
 
 
 //@IBDesignable
-public class LineChartView: UIView, UIGestureRecognizerDelegate{
+public class LineChartView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate{
     // MARK: Inspectable properties
     
     // reference lines related properties
@@ -107,6 +107,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     }
     
     var lineView:UIView!
+    var scrollView:UIScrollView!
     
     // MARK: init methods
     
@@ -129,17 +130,29 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     }
 
     func addView() {
+        // init scrollview
+        self.scrollView = UIScrollView()
+        self.scrollView.minimumZoomScale = 1;
+        self.scrollView.maximumZoomScale = 10;
+        self.scrollView.zoomScale = 1;
+        self.scrollView.delegate = self;
+        self.addSubview(self.scrollView)
+        self.scrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addConstraint(NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.Width, multiplier: 1, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.Height, multiplier: 1, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
+
+        // init lineview
         self.lineView = UIView()
-        
         self.lineView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        self.addSubview(self.lineView)
-        
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Width, multiplier: 0.9, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Height, multiplier: 0.9, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
-        
+        self.scrollView.addSubview(self.lineView)
+        self.scrollView.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.Width, multiplier: 0.9, constant: 0))
+        self.scrollView.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.Height, multiplier: 0.9, constant: 0))
+        self.scrollView.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
+        self.scrollView.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self.scrollView, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
         self.layoutIfNeeded()
+    
 
     }
     
@@ -448,6 +461,12 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         drawDots()
     }
     
+    
+    // MARK: UIScrollViewDelegate
+    
+    public func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        return self.lineView
+    }
     
 }
 

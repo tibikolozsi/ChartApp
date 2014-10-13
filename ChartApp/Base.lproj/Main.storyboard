@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6249" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6246" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6243"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6239"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -73,16 +73,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="khu-BV-5BX" secondAttribute="trailing" id="5m2-ri-H1A"/>
-                            <constraint firstAttribute="bottom" secondItem="khu-BV-5BX" secondAttribute="bottom" id="7dZ-YX-BVi"/>
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="9nc-8u-b3n"/>
-                            <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Nvw-tz-Vik"/>
+                            <constraint firstAttribute="bottom" secondItem="khu-BV-5BX" secondAttribute="bottom" id="DEn-pg-DkI"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="FFI-bI-d3F"/>
+                            <constraint firstAttribute="trailing" secondItem="khu-BV-5BX" secondAttribute="trailing" id="HJU-m8-VFv"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="44" id="Mut-IF-e8q"/>
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="O7M-p5-nBt"/>
                             <constraint firstAttribute="bottom" secondItem="Da6-U2-A9Y" secondAttribute="bottom" id="U9n-RW-ADT"/>
                             <constraint firstItem="Da6-U2-A9Y" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="m9H-XB-mV2"/>
                             <constraint firstAttribute="trailing" secondItem="Da6-U2-A9Y" secondAttribute="trailing" id="pJx-rI-hIJ"/>
                             <constraint firstItem="Da6-U2-A9Y" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="s2F-3u-2s2"/>
-                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="44" id="tqh-xa-Dey"/>
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="vOD-Bj-Vp1"/>
                         </constraints>
                     </view>
