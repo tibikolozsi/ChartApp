@@ -107,6 +107,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     }
     
     var lineView:UIView!
+    var horizontalLabelsView:UIView!
+    var verticalLabelsView:UIView!
     
     // MARK: init methods
     
@@ -133,11 +135,29 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         
         self.lineView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.addSubview(self.lineView)
+        self.verticalLabelsView = UIView()
+        self.verticalLabelsView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(self.verticalLabelsView)
+        self.verticalLabelsView.backgroundColor = UIColor.redColor()
+
+        self.horizontalLabelsView = UIView()
+        self.horizontalLabelsView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        self.addSubview(self.horizontalLabelsView)
+        self.horizontalLabelsView.backgroundColor = UIColor.redColor()
         
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Width, multiplier: 0.9, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Height, multiplier: 0.9, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
-        self.addConstraint(NSLayoutConstraint(item: self.lineView, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0))
+        
+        let views = ["vlView": self.verticalLabelsView, "superView" : self, "lineView" : self.lineView, "hView" : self.horizontalLabelsView]
+        let hConstraint = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vlView(30)]-2.0-[lineView]|", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
+        let hConstraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vlView(30)]-2.0-[hView]|", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
+
+        let vConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:|[vlView(superView)]", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
+        let vConstraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[lineView]-2.0-[hView(30)]|", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
+        self.addConstraints(hConstraint)
+        self.addConstraints(vConstraint)
+        self.addConstraints(vConstraint2)
+        self.addConstraints(hConstraint2)
+        
+        self.bringSubviewToFront(self.lineView)
         
         self.layoutIfNeeded()
 

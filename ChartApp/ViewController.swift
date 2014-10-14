@@ -9,7 +9,8 @@
 import UIKit
 import ChartFramework
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIScrollViewDelegate{
+    @IBOutlet weak var scrollView: UIScrollView!
 
     @IBOutlet weak var lineChartView: LineChartView!
     override func viewDidLoad() {
@@ -19,6 +20,16 @@ class ViewController: UIViewController {
         }
         self.lineChartView.setNeedsDisplay()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func scrollViewDidZoom(scrollView: UIScrollView) {
+        println(self.scrollView.contentSize)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.scrollView.minimumZoomScale = 1
+        self.scrollView.maximumZoomScale = 10
+        self.scrollView.zoomScale = 1
     }
 
     override func didReceiveMemoryWarning() {
