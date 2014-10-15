@@ -11,9 +11,12 @@ import UIKit
 class LinePoint {
     let value:Float // actual value of the point
     let position:CGPoint // position of the point
+    let label:String
     
-    init(value:Float, position:CGPoint) {
+    init(value:Float, position:CGPoint, label:String = "label") {
         self.value = value
         self.position = position
+        self.label = label
     }
+    
 }

@@ -110,6 +110,9 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     var horizontalLabelsView:UIView!
     var verticalLabelsView:UIView!
     
+    var verticalLabels:Array<UILabel>!
+    var horizontalLabels:Array<UILabel>!
+    
     // MARK: init methods
     
     required override public init(frame: CGRect) {
@@ -138,24 +141,26 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         self.verticalLabelsView = UIView()
         self.verticalLabelsView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.addSubview(self.verticalLabelsView)
-        self.verticalLabelsView.backgroundColor = UIColor.redColor()
+        self.verticalLabelsView.backgroundColor = UIColor.clearColor()
 
         self.horizontalLabelsView = UIView()
         self.horizontalLabelsView.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.addSubview(self.horizontalLabelsView)
-        self.horizontalLabelsView.backgroundColor = UIColor.redColor()
+        self.horizontalLabelsView.backgroundColor = UIColor.clearColor()
         
-        
+        let metrics = ["lHeight" : 20.0, "lWidth" : 40]
         let views = ["vlView": self.verticalLabelsView, "superView" : self, "lineView" : self.lineView, "hView" : self.horizontalLabelsView]
-        let hConstraint = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vlView(30)]-2.0-[lineView]|", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
-        let hConstraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vlView(30)]-2.0-[hView]|", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
+        let hConstraint = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vlView]-2.0-[lineView]|", options: NSLayoutFormatOptions(0), metrics: metrics, views:views)
+        let hConstraint2 = NSLayoutConstraint.constraintsWithVisualFormat("H:|[vlView]-2.0-[hView]|", options: NSLayoutFormatOptions(0), metrics: metrics, views:views)
 
-        let vConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:|[vlView(superView)]", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
-        let vConstraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[lineView]-2.0-[hView(30)]|", options: NSLayoutFormatOptions(0), metrics: nil, views:views)
+        let vConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:|[vlView(superView)]", options: NSLayoutFormatOptions(0), metrics: metrics, views:views)
+        let vConstraint2 = NSLayoutConstraint.constraintsWithVisualFormat("V:|[lineView]-2.0-[hView]|", options: NSLayoutFormatOptions(0), metrics: metrics, views:views)
         self.addConstraints(hConstraint)
         self.addConstraints(vConstraint)
         self.addConstraints(vConstraint2)
         self.addConstraints(hConstraint2)
+        self.addConstraint(NSLayoutConstraint(item: self.verticalLabelsView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Width, multiplier: 0.1, constant: 0))
+        self.addConstraint(NSLayoutConstraint(item: self.horizontalLabelsView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Height, multiplier: 0.1, constant: 0))
         
         self.bringSubviewToFront(self.lineView)
         
@@ -228,6 +233,18 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         drawDots()
     }
     
+    func makeAxisLabel(position:CGPoint,labelText:String) -> UILabel
+    {
+        var label = UILabel(frame: CGRect(origin: CGPoint(x:0,y:0), size: CGSize(width: 50, height: 20)))
+        label.text = labelText
+        label.font = UIFont.systemFontOfSize(12.0)
+        label.sizeToFit()
+        label.center = position
+        label.textAlignment = NSTextAlignment.Center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.0
+        return label
+    }
 
     // Draw Reference Lines
     func drawReferenceLines()  -> CAShapeLayer {
@@ -239,8 +256,18 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             referenceLinePath.lineCapStyle = kCGLineCapButt
             referenceLinePath.lineWidth = 0.1
             referenceLinePath.strokeWithBlendMode(kCGBlendModeNormal, alpha: 1.0)
+            self.verticalLabels = Array<UILabel>()
+            for view in self.verticalLabelsView.subviews
+            {
+                view.removeFromSuperview()
+            }
+            self.horizontalLabels = Array<UILabel>()
+            for view in self.horizontalLabelsView.subviews
+            {
+                view.removeFromSuperview()
+            }
             
-            
+
             let diff:Int = 2 // step for drawing reference lines if we dont need them all
             // draw vertical reference lines
             for var i = 0; i < self.points.count; i+=diff {
@@ -249,6 +276,23 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 let finalPoint:CGPoint = CGPointMake(pointX, 0)
                 referenceLinePath.moveToPoint(initialPoint)
                 referenceLinePath.addLineToPoint(finalPoint)
+                let point:LinePoint = self.points[i]
+ 
+                var label = self.makeAxisLabel(CGPoint(x:point.position.x,y:self.horizontalLabelsView.frame.size.height/2.0), labelText: point.label)
+                
+                if (self.horizontalLabels.count >= 1 ) {
+                    let previousLabel = self.horizontalLabels.last!
+                    println("previousLabel frame : \(previousLabel.frame)")
+                    println("currentLabel frame : \(label.frame)")
+                    if (fabs(previousLabel.center.x - label.center.x) > label.frame.size.width * 2) {
+                        self.horizontalLabels.append(label)
+                        self.horizontalLabelsView.addSubview(label)
+                    }
+                } else {
+                    self.horizontalLabels.append(label)
+                    self.horizontalLabelsView.addSubview(label)
+                }
+                
             }
             
             // sort points for drawing every diff. lines (eg. only 2nd lines)
@@ -262,6 +306,21 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 var finalPoint:CGPoint = CGPointMake(self.lineView.frame.size.width, pointY)
                 referenceLinePath.moveToPoint(initialPoint)
                 referenceLinePath.addLineToPoint(finalPoint)
+
+                let point:LinePoint = sortedPoints[i]
+                var label = self.makeAxisLabel(CGPoint(x:self.verticalLabelsView.frame.size.width/2.0,y:point.position.y), labelText: String("\(point.value)"))
+                if (self.verticalLabels.count >= 1 ) {
+                    let previousLabel = self.verticalLabels.last!
+                    println("previousLabel frame : \(previousLabel.frame)")
+                    println("currentLabel frame : \(label.frame)")
+                    if (fabs(previousLabel.center.y - label.center.y) > label.frame.size.height * 2) {
+                        self.verticalLabels.append(label)
+                        self.verticalLabelsView.addSubview(label)
+                    }
+                } else {
+                    self.verticalLabels.append(label)
+                    self.verticalLabelsView.addSubview(label)
+                }
             }
             
 //            if (self.enableReferenceFrame) {

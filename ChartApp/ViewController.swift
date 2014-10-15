@@ -15,6 +15,9 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     @IBOutlet weak var lineChartView: LineChartView!
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
+        
         for i in 1...5 {
             addRandomValueToLine()
         }
@@ -27,9 +30,13 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews() 
+        self.scrollView.contentSize = self.lineChartView.bounds.size
         self.scrollView.minimumZoomScale = 1
         self.scrollView.maximumZoomScale = 10
-        self.scrollView.zoomScale = 1
+        self.scrollView.zoomScale = 1.6
+        self.scrollView.userInteractionEnabled = true
+        self.scrollView.scrollEnabled = true
     }
 
     override func didReceiveMemoryWarning() {
