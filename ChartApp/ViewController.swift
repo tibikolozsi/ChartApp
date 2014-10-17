@@ -9,9 +9,14 @@
 import UIKit
 import ChartFramework
 
+<<<<<<< HEAD
 class ViewController: UIViewController, UIScrollViewDelegate{
     @IBOutlet weak var scrollView: UIScrollView!
+=======
+class ViewController: UIViewController, UIScrollViewDelegate {
+>>>>>>> aa6f6ec6b70813a742dcf1bc3474840d53c4a28b
 
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var lineChartView: LineChartView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +67,10 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
+    }
+    
+    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        return self.lineChartView
     }
 
 }

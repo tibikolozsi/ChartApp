@@ -90,7 +90,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="9nc-8u-b3n"/>
+<<<<<<< HEAD
                             <constraint firstAttribute="trailing" secondItem="7dM-7K-md4" secondAttribute="trailing" id="LdH-am-tOd"/>
+=======
+                            <constraint firstAttribute="bottom" secondItem="khu-BV-5BX" secondAttribute="bottom" id="DEn-pg-DkI"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="FFI-bI-d3F"/>
+                            <constraint firstAttribute="trailing" secondItem="khu-BV-5BX" secondAttribute="trailing" id="HJU-m8-VFv"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="44" id="Mut-IF-e8q"/>
+>>>>>>> aa6f6ec6b70813a742dcf1bc3474840d53c4a28b
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="O7M-p5-nBt"/>
                             <constraint firstAttribute="bottom" secondItem="Da6-U2-A9Y" secondAttribute="bottom" id="U9n-RW-ADT"/>
                             <constraint firstItem="7dM-7K-md4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="atD-w9-0GQ"/>
@@ -98,7 +105,10 @@
                             <constraint firstItem="Da6-U2-A9Y" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="m9H-XB-mV2"/>
                             <constraint firstAttribute="trailing" secondItem="Da6-U2-A9Y" secondAttribute="trailing" id="pJx-rI-hIJ"/>
                             <constraint firstItem="Da6-U2-A9Y" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="s2F-3u-2s2"/>
+<<<<<<< HEAD
                             <constraint firstItem="7dM-7K-md4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="44" id="tbH-ns-Ka6"/>
+=======
+>>>>>>> aa6f6ec6b70813a742dcf1bc3474840d53c4a28b
                             <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="vOD-Bj-Vp1"/>
                         </constraints>
                     </view>
