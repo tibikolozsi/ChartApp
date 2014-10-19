@@ -115,7 +115,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     var verticalLabels:Array<UILabel>!
     var horizontalLabels:Array<UILabel>!
     
-        var fillToBottom:CAShapeLayer = CAShapeLayer()
+    var fillToBottom = CAShapeLayer()
+    var fillToBottomHighlighted = CAShapeLayer()
     
     // MARK: init methods
     
@@ -260,6 +261,13 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             self.fillToBottom.fillColor = UIColor.whiteColor().CGColor
             self.fillToBottom.frame.size = self.lineView.frame.size
             
+            self.fillToBottomHighlighted = CAShapeLayer()
+            self.fillToBottomHighlighted.path = fillToBottomPath.CGPath
+            self.fillToBottomHighlighted.strokeColor = nil
+            self.fillToBottomHighlighted.hidden = true
+            self.fillToBottomHighlighted.fillColor = UIColor.greenColor().CGColor
+            self.fillToBottomHighlighted.frame.size = self.lineView.frame.size
+            
             var gradientLayer = CAGradientLayer()
             gradientLayer.anchorPoint = CGPointZero
             gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
@@ -274,6 +282,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             self.fillToBottom.mask = gradientLayer
             self.animateForLayer(fillToBottom, animationType: LineViewAnimationType.LineViewAnimationTypeFillToBottomAnimation)
             self.lineLayer.addSublayer(self.fillToBottom)
+            self.lineLayer.addSublayer(self.fillToBottomHighlighted)
         }
     }
     
@@ -580,6 +589,11 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             closestDotLeft.color = UIColor.whiteColor()
             closestDotRight.color = UIColor.whiteColor()
             
+            self.fillToBottomHighlighted.hidden = false
+            var maskLayer = CALayer()
+            maskLayer.backgroundColor = UIColor.blackColor().CGColor
+            maskLayer.frame = CGRect(x: leftTouch.x, y: 0, width: rightTouch.x-leftTouch.x, height: self.lineView.frame.size.height)
+            self.fillToBottomHighlighted.mask = maskLayer
             
         // To make sure the vertical line doesn't go beyond the frame of the graph.
         if (!((leftTouch.x + self.lineView.frame.origin.x) <= self.lineView.frame.origin.x) &&
@@ -620,6 +634,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 var closestDotRight = self.closestDotFromTouchLine(self.touchLineRight!)
                 closestDotLeft.color = self.dotColor
                 closestDotRight.color = self.dotColor
+                
+                self.fillToBottomHighlighted.hidden = true
                 
                 }, completion: nil)
             

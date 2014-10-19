@@ -45,6 +45,7 @@ public class InterractionView: UIView {
         self.addSubview(self.pin)
         
         self.info = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
+        self.info.layer.cornerRadius = 10.0
         self.info.center.x = self.line.center.x
         self.info.backgroundColor = UIColor.lightGrayColor()
         self.infoLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
