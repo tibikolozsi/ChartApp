@@ -21,63 +21,15 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="Da6-U2-A9Y">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7dM-7K-md4">
-                                <rect key="frame" x="0.0" y="44" width="480" height="276"/>
-                                <subviews>
-                                    <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="khu-BV-5BX" customClass="LineChartView" customModule="ChartFramework">
-                                        <rect key="frame" x="0.0" y="0.0" width="480" height="276"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="enableReferenceLine" value="YES"/>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="enableReferenceFrame" value="YES"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="lineAlpha">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                                <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="lineWidth">
-                                                <real key="value" value="5"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="bezierCurveIsEnabled" value="YES"/>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="animationTime">
-                                                <real key="value" value="2"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="dotSize">
-                                                <real key="value" value="8"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="dotColor">
-                                                <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                            <rect key="frame" x="0.0" y="250" width="800" height="300"/>
-                                        </variation>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="khu-BV-5BX" secondAttribute="bottom" id="1f9-rS-vg5"/>
-                                    <constraint firstAttribute="height" secondItem="khu-BV-5BX" secondAttribute="height" id="4PW-7B-cEH"/>
-                                    <constraint firstAttribute="width" secondItem="khu-BV-5BX" secondAttribute="width" id="DuQ-sA-9Ke"/>
-                                    <constraint firstAttribute="trailing" secondItem="khu-BV-5BX" secondAttribute="trailing" id="HQe-GH-HOI"/>
-                                    <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="7dM-7K-md4" secondAttribute="leading" id="T0x-ca-Rm4"/>
-                                    <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="7dM-7K-md4" secondAttribute="top" id="jP4-or-SmF"/>
-                                </constraints>
-                                <connections>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="pZc-ai-ZQ2"/>
-                                </connections>
-                            </scrollView>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x4E-0V-9DX">
                                 <rect key="frame" x="16" y="20" width="51" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="IWH-C0-l69"/>
+                                    <constraint firstAttribute="width" constant="49" id="MuV-Eh-cl2"/>
+                                </constraints>
                                 <color key="onTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="heightClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="276" y="20" width="51" height="31"/>
-                                </variation>
                                 <variation key="widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="16" y="20" width="51" height="31"/>
-                                </variation>
-                                <variation key="heightClass=compact-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="176" y="20" width="51" height="31"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="36" y="20" width="51" height="31"/>
@@ -86,27 +38,55 @@
                                     <action selector="switchChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="aBT-mu-bJL"/>
                                 </connections>
                             </switch>
+                            <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="khu-BV-5BX" customClass="LineChartView" customModule="ChartFramework">
+                                <rect key="frame" x="0.0" y="50" width="480" height="276"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableReferenceLine" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="enableReferenceFrame" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="lineAlpha">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="lineWidth">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="bezierCurveIsEnabled" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="animationTime">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="dotSize">
+                                        <real key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="dotColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="250" width="800" height="300"/>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="9nc-8u-b3n"/>
-                            <constraint firstAttribute="trailing" secondItem="7dM-7K-md4" secondAttribute="trailing" id="LdH-am-tOd"/>
-                            <constraint firstItem="x4E-0V-9DX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="O7M-p5-nBt"/>
-                            <constraint firstAttribute="bottom" secondItem="Da6-U2-A9Y" secondAttribute="bottom" id="U9n-RW-ADT"/>
-                            <constraint firstItem="7dM-7K-md4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="atD-w9-0GQ"/>
-                            <constraint firstAttribute="bottom" secondItem="7dM-7K-md4" secondAttribute="bottom" id="cSP-1O-6jI"/>
-                            <constraint firstItem="Da6-U2-A9Y" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="m9H-XB-mV2"/>
-                            <constraint firstAttribute="trailing" secondItem="Da6-U2-A9Y" secondAttribute="trailing" id="pJx-rI-hIJ"/>
-                            <constraint firstItem="Da6-U2-A9Y" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="s2F-3u-2s2"/>
-                            <constraint firstItem="7dM-7K-md4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="44" id="tbH-ns-Ka6"/>
-                            <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="vOD-Bj-Vp1"/>
+                            <constraint firstAttribute="trailing" secondItem="Da6-U2-A9Y" secondAttribute="trailing" id="4ou-LA-652"/>
+                            <constraint firstItem="Da6-U2-A9Y" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="KPu-LB-Gp4"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Da6-U2-A9Y" secondAttribute="bottom" id="NYV-cg-zwU"/>
+                            <constraint firstAttribute="trailing" secondItem="khu-BV-5BX" secondAttribute="trailing" id="Ufw-Le-zph"/>
+                            <constraint firstItem="x4E-0V-9DX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="fRZ-ms-aXj"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="x4E-0V-9DX" secondAttribute="bottom" constant="-1" id="gEI-lH-2kO"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="iT5-4x-Ajl"/>
+                            <constraint firstItem="Da6-U2-A9Y" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="lnk-jU-ddS"/>
+                            <constraint firstItem="x4E-0V-9DX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="uzm-pk-cLe"/>
+                            <constraint firstAttribute="bottom" secondItem="khu-BV-5BX" secondAttribute="bottom" id="ztR-US-8Um"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="lineChartView" destination="khu-BV-5BX" id="qC9-nP-6va"/>
-                        <outlet property="scrollView" destination="7dM-7K-md4" id="Aln-N2-0qH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

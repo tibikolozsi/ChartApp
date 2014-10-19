@@ -44,7 +44,7 @@ class Line {
         self.path.moveToPoint(points.first!.position)
         
         if self.lineType == LineType.LineTypeSpline {
-            println("calculating Spline")
+//            println("calculating Spline")
             var modPoints = self.points
             modPoints.insert(points.first!, atIndex: 0)
             modPoints.insert(points.last!, atIndex: points.count)
@@ -88,7 +88,7 @@ class Line {
                 }
             }
         } else {
-            println("calculating Simple Line")
+//            println("calculating Simple Line")
             for point in self.points {
                 self.path.addLineToPoint(point.position)
             }

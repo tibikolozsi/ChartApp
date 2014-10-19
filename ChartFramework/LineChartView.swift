@@ -37,7 +37,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     // reference lines related properties
     @IBInspectable var enableReferenceLine: Bool = true
-    @IBInspectable var enableReferenceFrame: Bool = true
     
     // graph line related properties
     @IBInspectable var lineAlpha: Float = 1.0
@@ -50,16 +49,9 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     }
     @IBInspectable var animationType: LineViewAnimationType = LineViewAnimationType.LineViewAnimationTypeDraw
     @IBInspectable var animationTime: CGFloat = 0
-    
-    
-    @IBInspectable let topColor: UIColor = UIColor.redColor()
-    @IBInspectable let bottomColor: UIColor = UIColor.redColor()
 
     @IBInspectable var dotSize:CGFloat = 5.0
     @IBInspectable var dotColor:UIColor = UIColor.blueColor()
-
-    let xAxisBackgroundColor: UIColor = UIColor.redColor()
-    let xAxisBackgroundColorAlpha: CGFloat = 1.0
     
     let referenceLineColor = UIColor.blackColor()
     
@@ -123,10 +115,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     required override public init(frame: CGRect) {
         super.init(frame: frame)
         self.initAll()
-        
-
-        
-
         self.backgroundColor = UIColor.clearColor()
     }
     
@@ -214,8 +202,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         eraseLineView()
         refreshPoints()
        
-        println("LineChartView.drawRect");
-        println("brezier: \(self.bezierCurveIsEnabled)")
+//        println("LineChartView.drawRect");
+//        println("brezier: \(self.bezierCurveIsEnabled)")
         
         var referenceLinesShapeLayer = self.drawReferenceLines()
         var line = Line(points:self.points, type: self.lineType)
@@ -280,7 +268,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             gradientLayer.locations = [Float(0.0),Float(1.0)]
             gradientLayer.bounds = CGRect(origin: CGPointZero, size: self.lineView.bounds.size)
             self.fillToBottom.mask = gradientLayer
-            self.animateForLayer(fillToBottom, animationType: LineViewAnimationType.LineViewAnimationTypeFillToBottomAnimation)
+            self.animateForLayer(fillToBottom, animationType: LineViewAnimationType.LineViewAnimationTypeFade)
             self.lineLayer.addSublayer(self.fillToBottom)
             self.lineLayer.addSublayer(self.fillToBottomHighlighted)
         }
@@ -335,8 +323,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 
                 if (self.horizontalLabels.count >= 1 ) {
                     let previousLabel = self.horizontalLabels.last!
-                    println("previousLabel frame : \(previousLabel.frame)")
-                    println("currentLabel frame : \(label.frame)")
+//                    println("previousLabel frame : \(previousLabel.frame)")
+//                    println("currentLabel frame : \(label.frame)")
                     if (fabs(previousLabel.center.x - label.center.x) > label.frame.size.width * 2) {
                         self.horizontalLabels.append(label)
                         self.horizontalLabelsView.addSubview(label)
@@ -352,6 +340,13 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             let sortedPoints = sorted(self.points, { (p1:LinePoint, p2:LinePoint) -> Bool in
                 return p1.position.y > p2.position.y
             })
+            
+            // draw first horizontal line at y=0
+            var initialPoint:CGPoint = CGPointMake(0, 0)
+            var finalPoint:CGPoint = CGPointMake(self.lineView.frame.size.width, 0)
+            referenceLinePath.moveToPoint(initialPoint)
+            referenceLinePath.addLineToPoint(finalPoint)
+            
             // draw horizontal lines
             for var i = 0; i < sortedPoints.count; i+=diff {
                 let pointY = sortedPoints[i].position.y
@@ -364,8 +359,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 var label = self.makeAxisLabel(CGPoint(x:self.verticalLabelsView.frame.size.width/2.0,y:point.position.y), labelText: String("\(point.value)"))
                 if (self.verticalLabels.count >= 1 ) {
                     let previousLabel = self.verticalLabels.last!
-                    println("previousLabel frame : \(previousLabel.frame)")
-                    println("currentLabel frame : \(label.frame)")
+//                    println("previousLabel frame : \(previousLabel.frame)")
+//                    println("currentLabel frame : \(label.frame)")
                     if (fabs(previousLabel.center.y - label.center.y) > label.frame.size.height * 2) {
                         self.verticalLabels.append(label)
                         self.verticalLabelsView.addSubview(label)
@@ -375,14 +370,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                     self.verticalLabelsView.addSubview(label)
                 }
             }
-            
-//            if (self.enableReferenceFrame) {
-//                referenceLinePath.moveToPoint(CGPointMake(0, self.lineView.frame.size.height - self.frameOffset))
-//                referenceLinePath.addLineToPoint(CGPointMake(self.lineView.frame.size.width, self.lineView.frame.size.height - self.frameOffset))
-//                
-//                referenceLinePath.moveToPoint(CGPointMake(0+self.lineWidth/4, self.lineView.frame.size.height - self.frameOffset))
-//                referenceLinePath.addLineToPoint(CGPointMake(0+self.lineWidth/4, 0))
-//            }
             referenceLinePath.closePath()
             
             // add path to self.layer
@@ -470,14 +457,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 animation.toValue = self.lineAlpha
             }
             shapeLayer.addAnimation(animation, forKey: "opacity")
-        } else if (animationType == LineViewAnimationType.LineViewAnimationTypeFillToBottomAnimation) {
-            var animation = CABasicAnimation(keyPath: "opacity")
-            animation.duration = CFTimeInterval(self.animationTime)*3
-            animation.fromValue = 0.0
-            animation.toValue = 1.0
-            shapeLayer.addAnimation(animation, forKey: "opacity")
-            
-        }else {
+        } else {
             var animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.duration = CFTimeInterval(self.animationTime)
             animation.fromValue = 0.0
@@ -512,7 +492,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         }
         
 
-        println("added value: \(randomValue)")
+//        println("added value: \(randomValue)")
         
         self.addValueToLine(randomValue)
     }
@@ -566,7 +546,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     func pinchHandler(recognizer:UIPinchGestureRecognizer){
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        println("state: \(recognizer.state)")
+//        println("state: \(recognizer.state)")
         if (recognizer.numberOfTouches() == 2) {
             var leftTouch: CGPoint
             var rightTouch: CGPoint
@@ -626,7 +606,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         
         }
         if (recognizer.state == UIGestureRecognizerState.Ended) {
-            println("ended")
+//            println("ended")
             UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: { () -> Void in
                 self.touchLineLeft!.alpha = 0.0
                 self.touchLineRight!.alpha = 0.0
@@ -653,7 +633,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 dotView = dot
             }
         }
-        println(dotView)
+//        println(dotView)
         return dotView
     }
     
