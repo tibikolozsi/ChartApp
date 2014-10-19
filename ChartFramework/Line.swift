@@ -93,7 +93,6 @@ class Line {
                 self.path.addLineToPoint(point.position)
             }
         }
-        
     }
     
 

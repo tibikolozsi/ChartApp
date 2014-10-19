@@ -113,6 +113,8 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     var verticalLabels:Array<UILabel>!
     var horizontalLabels:Array<UILabel>!
     
+        var fillToBottom:CAShapeLayer = CAShapeLayer()
+    
     // MARK: init methods
     
     required override public init(frame: CGRect) {
@@ -222,13 +224,41 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             pathLayer.path = line.path.CGPath
             pathLayer.strokeColor = self.lineColor.CGColor
             pathLayer.fillColor = nil
-            pathLayer.lineWidth = self.lineWidth
+            pathLayer.lineWidth = 2//self.lineWidth
             pathLayer.lineJoin = kCALineJoinBevel
             pathLayer.lineCap = kCALineCapRound
             self.animateForLayer(pathLayer, animationType:LineViewAnimationType.LineViewAnimationTypeDraw, isAnimatingReferenceLine:true)
             self.animateForLayer(referenceLinesShapeLayer, animationType: LineViewAnimationType.LineViewAnimationTypeDraw, isAnimatingReferenceLine: true)
             self.lineLayer.addSublayer(pathLayer)
             self.lineLayer.addSublayer(referenceLinesShapeLayer)
+            
+            if line.points.count > 0 {
+                var fillToBottomPath = line.path //UIBezierPath(CGPath: self.line.path.CGPath)
+                fillToBottomPath.addLineToPoint(CGPoint(x:line.points.last!.position.x,y:self.lineView.frame.size.height))
+                fillToBottomPath.addLineToPoint(CGPoint(x:line.points.first!.position.x,y:self.lineView.frame.size.height))
+                fillToBottomPath.closePath()
+                self.fillToBottom = CAShapeLayer()
+                self.fillToBottom.path = fillToBottomPath.CGPath
+                self.fillToBottom.strokeColor = nil
+                self.fillToBottom.fillColor = UIColor.whiteColor().CGColor
+                self.fillToBottom.frame.size = self.lineView.frame.size
+                
+                var gradientLayer = CAGradientLayer()
+                gradientLayer.anchorPoint = CGPointZero
+                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+                
+                var topColor:CGColorRef = UIColor(white: 1.0, alpha: 0.4).CGColor
+                var bottomColor:CGColorRef = UIColor(white: 1.0, alpha: 0.0).CGColor
+                
+                gradientLayer.colors = [topColor,bottomColor]
+                gradientLayer.locations = [Float(0.0),Float(1.0)]
+                gradientLayer.bounds = CGRect(origin: CGPointZero, size: self.lineView.bounds.size)
+                self.fillToBottom.mask = gradientLayer
+                self.animateForLayer(fillToBottom, animationType: LineViewAnimationType.LineViewAnimationTypeDraw, isAnimatingReferenceLine: true)
+                self.lineLayer.addSublayer(self.fillToBottom)
+            }
+
         }
         drawDots()
     }
@@ -379,7 +409,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     func refreshPoints() {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        let oldMin:Float = Float(self.minValue)
+        let oldMin:Float = self.minValue < 0 ? Float(self.minValue) : 0
         let oldMax:Float = Float(self.maxValue)
         let newMargin:Float = 10.0
         let newMin:Float = Float(0.0) + newMargin
@@ -441,7 +471,15 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     func addRandomValueToLine() {
         var randomValue: Float = Float(arc4random_uniform(2000))
+        var minus:Float = Float(arc4random_uniform(4))
+        
+        if minus == 2 {
+            randomValue *= -1
+        }
+        
+
         println("added value: \(randomValue)")
+        
         self.addValueToLine(randomValue)
     }
     
