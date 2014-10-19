@@ -11,6 +11,7 @@ import UIKit
 enum LineViewAnimationType {
     case LineViewAnimationTypeDraw
     case LineViewAnimationTypeFade
+    case LineViewAnimationTypeFillToBottomAnimation
     case LineViewAnimationTypeNone
 }
 
@@ -82,15 +83,16 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     var panGestureRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer()
     var doubleTapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
+    var pinchGestureRecognizer: UIPinchGestureRecognizer = UIPinchGestureRecognizer()
     
     
     
     // Line when touching
-    var touchLine: InterractionView?
+    var touchLineLeft: InterractionView?
+    var touchLineRight: InterractionView?
     var touchLineColor: UIColor = UIColor.grayColor()
     var touchLineWidth: CGFloat = 1.0
     
-    var closestDot:DotView!
     var dots:Array<DotView> = Array<DotView>()
     
     var lineLayer:CALayer = CALayer()
@@ -183,15 +185,23 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     func initGestureRecognizers() {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapHandler:"))
+
+        self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapHandler:"))
         self.tapGestureRecognizer.delegate = self
-        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panHandler:"))
+        self.lineView.addGestureRecognizer(self.tapGestureRecognizer)
+        
+        self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("panHandler:"))
         self.panGestureRecognizer.delegate = self
         self.panGestureRecognizer.maximumNumberOfTouches = 1
-        self.lineView.addGestureRecognizer(self.tapGestureRecognizer)
         self.lineView.addGestureRecognizer(self.panGestureRecognizer)
-        doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("doubleTapHandler:"))
-        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        
+        self.pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: Selector("pinchHandler:"))
+        self.pinchGestureRecognizer.delegate = self
+        self.lineView.addGestureRecognizer(self.pinchGestureRecognizer)
+        
+
+        self.doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("doubleTapHandler:"))
+        self.doubleTapGestureRecognizer.numberOfTapsRequired = 2
         self.addGestureRecognizer(self.doubleTapGestureRecognizer)
         
     }
@@ -232,35 +242,39 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             self.lineLayer.addSublayer(pathLayer)
             self.lineLayer.addSublayer(referenceLinesShapeLayer)
             
-            if line.points.count > 0 {
-                var fillToBottomPath = line.path //UIBezierPath(CGPath: self.line.path.CGPath)
-                fillToBottomPath.addLineToPoint(CGPoint(x:line.points.last!.position.x,y:self.lineView.frame.size.height))
-                fillToBottomPath.addLineToPoint(CGPoint(x:line.points.first!.position.x,y:self.lineView.frame.size.height))
-                fillToBottomPath.closePath()
-                self.fillToBottom = CAShapeLayer()
-                self.fillToBottom.path = fillToBottomPath.CGPath
-                self.fillToBottom.strokeColor = nil
-                self.fillToBottom.fillColor = UIColor.whiteColor().CGColor
-                self.fillToBottom.frame.size = self.lineView.frame.size
-                
-                var gradientLayer = CAGradientLayer()
-                gradientLayer.anchorPoint = CGPointZero
-                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-                
-                var topColor:CGColorRef = UIColor(white: 1.0, alpha: 0.4).CGColor
-                var bottomColor:CGColorRef = UIColor(white: 1.0, alpha: 0.0).CGColor
-                
-                gradientLayer.colors = [topColor,bottomColor]
-                gradientLayer.locations = [Float(0.0),Float(1.0)]
-                gradientLayer.bounds = CGRect(origin: CGPointZero, size: self.lineView.bounds.size)
-                self.fillToBottom.mask = gradientLayer
-                self.animateForLayer(fillToBottom, animationType: LineViewAnimationType.LineViewAnimationTypeDraw, isAnimatingReferenceLine: true)
-                self.lineLayer.addSublayer(self.fillToBottom)
-            }
+            self.prepareFillToBottom(line)
 
         }
         drawDots()
+    }
+    
+    func prepareFillToBottom(line:Line) {
+        if line.points.count > 0 {
+            var fillToBottomPath = line.path //UIBezierPath(CGPath: self.line.path.CGPath)
+            fillToBottomPath.addLineToPoint(CGPoint(x:line.points.last!.position.x,y:self.lineView.frame.size.height))
+            fillToBottomPath.addLineToPoint(CGPoint(x:line.points.first!.position.x,y:self.lineView.frame.size.height))
+            fillToBottomPath.closePath()
+            self.fillToBottom = CAShapeLayer()
+            self.fillToBottom.path = fillToBottomPath.CGPath
+            self.fillToBottom.strokeColor = nil
+            self.fillToBottom.fillColor = UIColor.whiteColor().CGColor
+            self.fillToBottom.frame.size = self.lineView.frame.size
+            
+            var gradientLayer = CAGradientLayer()
+            gradientLayer.anchorPoint = CGPointZero
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            
+            var topColor:CGColorRef = UIColor(white: 1.0, alpha: 0.4).CGColor
+            var bottomColor:CGColorRef = UIColor(white: 1.0, alpha: 0.0).CGColor
+            
+            gradientLayer.colors = [topColor,bottomColor]
+            gradientLayer.locations = [Float(0.0),Float(1.0)]
+            gradientLayer.bounds = CGRect(origin: CGPointZero, size: self.lineView.bounds.size)
+            self.fillToBottom.mask = gradientLayer
+            self.animateForLayer(fillToBottom, animationType: LineViewAnimationType.LineViewAnimationTypeFillToBottomAnimation)
+            self.lineLayer.addSublayer(self.fillToBottom)
+        }
     }
     
     func makeAxisLabel(position:CGPoint,labelText:String) -> UILabel
@@ -401,9 +415,13 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     func addTouchLineToView()
     {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        self.touchLine = InterractionView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.lineView.frame.size.height))
-        self.touchLine?.alpha = 0
-        self.lineView.addSubview(self.touchLine!)
+        self.touchLineLeft = InterractionView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.lineView.frame.size.height))
+        self.touchLineLeft?.alpha = 0
+        self.lineView.addSubview(self.touchLineLeft!)
+
+        self.touchLineRight = InterractionView(frame: CGRect(x: 0, y: 0, width: self.touchLineWidth, height: self.lineView.frame.size.height))
+        self.touchLineRight?.alpha = 0
+        self.lineView.addSubview(self.touchLineRight!)
     }
 
     
@@ -429,7 +447,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
    
     // MARK: Animation methods
     
-    func animateForLayer(shapeLayer: CAShapeLayer, animationType:LineViewAnimationType, isAnimatingReferenceLine:Bool)
+    func animateForLayer(shapeLayer: CAShapeLayer, animationType:LineViewAnimationType, isAnimatingReferenceLine:Bool = false)
     {
         if (animationType == LineViewAnimationType.LineViewAnimationTypeNone) {
             return
@@ -443,7 +461,14 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 animation.toValue = self.lineAlpha
             }
             shapeLayer.addAnimation(animation, forKey: "opacity")
-        } else {
+        } else if (animationType == LineViewAnimationType.LineViewAnimationTypeFillToBottomAnimation) {
+            var animation = CABasicAnimation(keyPath: "opacity")
+            animation.duration = CFTimeInterval(self.animationTime)*3
+            animation.fromValue = 0.0
+            animation.toValue = 1.0
+            shapeLayer.addAnimation(animation, forKey: "opacity")
+            
+        }else {
             var animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.duration = CFTimeInterval(self.animationTime)
             animation.fromValue = 0.0
@@ -497,13 +522,10 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     func panHandler(recognizer:UIPanGestureRecognizer){
         Logger.Log(className: NSStringFromClass(self.classForCoder))
         
-        self.touchLine!.alpha = 1.0
-        if self.closestDot != nil {
-            self.closestDot.color = self.dotColor
-        }
-        
-        self.closestDot = self.closestDotFromTouchLine(self.touchLine!)
-        self.closestDot.color = UIColor.whiteColor()
+        self.touchLineLeft!.alpha = 1.0
+
+        var closestDotLeft = self.closestDotFromTouchLine(self.touchLineLeft!)
+        closestDotLeft.color = UIColor.whiteColor()
         
         let translation = recognizer.locationInView(self.lineView.viewForBaselineLayout())
         // To make sure the vertical line doesn't go beyond the frame of the graph.
@@ -511,14 +533,13 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             !((translation.x + self.lineView.frame.origin.x) >= self.lineView.frame.origin.x + self.lineView.frame.size.width))
         {
             var origin = CGPoint(x: translation.x - self.touchLineWidth/2.0, y: 0.0)
-            var frame = self.touchLine!.frame
+            var frame = self.touchLineLeft!.frame
             frame.origin = origin
-            self.touchLine?.frame = frame
-            self.touchLine?.center.x = translation.x
-            self.touchLine?.pin.center.y = self.closestDot.center.y
-            self.touchLine?.text = closestDot.value.description
-            self.touchLine?.line.frame.size.height = self.lineView.frame.size.height
-//            self.touchLine!.backgroundColor = UIColor.redColor()
+            self.touchLineLeft?.frame = frame
+            self.touchLineLeft?.center.x = translation.x
+            self.touchLineLeft?.pin.center.y = closestDotLeft.center.y
+            self.touchLineLeft?.text = closestDotLeft.value.description
+            self.touchLineLeft?.line.frame.size.height = self.lineView.frame.size.height
             
         }
 
@@ -526,8 +547,79 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         
         if (recognizer.state == UIGestureRecognizerState.Ended) {
             UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: { () -> Void in
-                self.touchLine!.alpha = 0.0
-                self.closestDot.color = self.dotColor
+                self.touchLineLeft!.alpha = 0.0
+                closestDotLeft.color = self.dotColor
+                
+                }, completion: nil)
+            
+        }
+    }
+    
+    func pinchHandler(recognizer:UIPinchGestureRecognizer){
+        Logger.Log(className: NSStringFromClass(self.classForCoder))
+        println("state: \(recognizer.state)")
+        if (recognizer.numberOfTouches() == 2) {
+            var leftTouch: CGPoint
+            var rightTouch: CGPoint
+            var touch1 = recognizer.locationOfTouch(0, inView: self.lineView)
+            var touch2 = recognizer.locationOfTouch(1, inView: self.lineView)
+            
+            if (touch1.x > touch2.x) {
+                rightTouch = touch1
+                leftTouch = touch2
+            } else {
+                rightTouch = touch2
+                leftTouch = touch1
+            }
+            
+            self.touchLineLeft!.alpha = 1.0
+            self.touchLineRight!.alpha = 1.0
+        
+            var closestDotLeft = self.closestDotFromTouchLine(self.touchLineLeft!)
+            var closestDotRight = self.closestDotFromTouchLine(self.touchLineRight!)
+            closestDotLeft.color = UIColor.whiteColor()
+            closestDotRight.color = UIColor.whiteColor()
+            
+            
+        // To make sure the vertical line doesn't go beyond the frame of the graph.
+        if (!((leftTouch.x + self.lineView.frame.origin.x) <= self.lineView.frame.origin.x) &&
+            !((leftTouch.x + self.lineView.frame.origin.x) >= self.lineView.frame.origin.x + self.lineView.frame.size.width))
+        {
+            var origin = CGPoint(x: leftTouch.x - self.touchLineWidth/2.0, y: 0.0)
+            var frame = self.touchLineLeft!.frame
+            frame.origin = origin
+            self.touchLineLeft?.frame = frame
+            self.touchLineLeft?.center.x = leftTouch.x
+            self.touchLineLeft?.pin.center.y = closestDotLeft.center.y
+            self.touchLineLeft?.text = closestDotLeft.value.description
+            self.touchLineLeft?.line.frame.size.height = self.lineView.frame.size.height
+            
+        }
+            // To make sure the vertical line doesn't go beyond the frame of the graph.
+            if (!((rightTouch.x + self.lineView.frame.origin.x) <= self.lineView.frame.origin.x) &&
+                !((rightTouch.x + self.lineView.frame.origin.x) >= self.lineView.frame.origin.x + self.lineView.frame.size.width))
+            {
+                var origin = CGPoint(x: rightTouch.x - self.touchLineWidth/2.0, y: 0.0)
+                var frame = self.touchLineLeft!.frame
+                frame.origin = origin
+                self.touchLineRight?.frame = frame
+                self.touchLineRight?.center.x = rightTouch.x
+                self.touchLineRight?.pin.center.y = closestDotRight.center.y
+                self.touchLineRight?.text = closestDotRight.value.description
+                self.touchLineRight?.line.frame.size.height = self.lineView.frame.size.height
+                
+            }
+        
+        }
+        if (recognizer.state == UIGestureRecognizerState.Ended) {
+            println("ended")
+            UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: { () -> Void in
+                self.touchLineLeft!.alpha = 0.0
+                self.touchLineRight!.alpha = 0.0
+                var closestDotLeft = self.closestDotFromTouchLine(self.touchLineLeft!)
+                var closestDotRight = self.closestDotFromTouchLine(self.touchLineRight!)
+                closestDotLeft.color = self.dotColor
+                closestDotRight.color = self.dotColor
                 
                 }, completion: nil)
             
@@ -535,18 +627,18 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     }
     
     func closestDotFromTouchLine(line:UIView) -> DotView {
-        self.closestDot = self.dots.first
+        var dotView = self.dots.first!
         var closestDiff: CGFloat = self.lineView.frame.width*2.0
         let lineXPos = line.frame.origin.x
         for dot in self.dots {
             var currentDif = fabs(dot.frame.origin.x - lineXPos)
             if currentDif <= closestDiff{
                 closestDiff = currentDif
-                self.closestDot = dot
+                dotView = dot
             }
         }
-        println(self.closestDot)
-        return self.closestDot
+        println(dotView)
+        return dotView
     }
     
     public override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
