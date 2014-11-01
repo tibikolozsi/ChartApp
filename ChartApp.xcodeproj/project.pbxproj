@@ -28,6 +28,7 @@
 		679861E319DDC4EC0095EA40 /* InterractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679861E219DDC4EC0095EA40 /* InterractionView.swift */; };
 		67B276B71A050CB500DF5EFA /* MathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B276B61A050CB500DF5EFA /* MathHelper.swift */; };
 		67B276BB1A052B0800DF5EFA /* PSColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B276BA1A052B0800DF5EFA /* PSColor.swift */; };
+		67B276BD1A0539BA00DF5EFA /* SliceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B276BC1A0539BA00DF5EFA /* SliceData.swift */; };
 		67D38FD419D86C920067FEE5 /* DotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D38FD319D86C920067FEE5 /* DotView.swift */; };
 		67D38FD619D87FD20067FEE5 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D38FD519D87FD20067FEE5 /* Logger.swift */; };
 /* End PBXBuildFile section */
@@ -110,6 +111,7 @@
 		679861E219DDC4EC0095EA40 /* InterractionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterractionView.swift; sourceTree = "<group>"; };
 		67B276B61A050CB500DF5EFA /* MathHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathHelper.swift; sourceTree = "<group>"; };
 		67B276BA1A052B0800DF5EFA /* PSColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSColor.swift; sourceTree = "<group>"; };
+		67B276BC1A0539BA00DF5EFA /* SliceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliceData.swift; sourceTree = "<group>"; };
 		67D38FD319D86C920067FEE5 /* DotView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotView.swift; sourceTree = "<group>"; };
 		67D38FD519D87FD20067FEE5 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -253,6 +255,7 @@
 			children = (
 				674A580C19FEDA6B0073A1AE /* PieChartView.swift */,
 				674A581019FEDD0E0073A1AE /* PieSliceLayer.swift */,
+				67B276BC1A0539BA00DF5EFA /* SliceData.swift */,
 			);
 			name = "Pie Chart";
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				679861E319DDC4EC0095EA40 /* InterractionView.swift in Sources */,
 				6712AB0219D8292300A2E842 /* LineChartView.swift in Sources */,
 				6794A14419DF22BF007027BA /* Line.swift in Sources */,
+				67B276BD1A0539BA00DF5EFA /* SliceData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

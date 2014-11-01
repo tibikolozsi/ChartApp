@@ -16,16 +16,28 @@ class PieChartViewController: UIViewController, PieChartDataSource, PieChartDele
 
     @IBOutlet weak var pieChartView: PieChartView!
     
+    var data: Array<SliceData> = Array<SliceData>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         pieChartView.dataSource = self
         pieChartView.delegate = self
-        pieChartView.reloadData()
+
+        data = [SliceData(value: 2.0, text: "Two", color: PSColor(r: 61, g: 147, b: 147, a: 1.0)),
+            SliceData(value: 3.0, text: "", color: PSColor(r: 244, g: 129, b: 128, a: 1.0)),
+            SliceData(value: 4.0, text: "", color: PSColor(r: 182, g: 208, b: 72, a: 1.0)),
+            SliceData(value: 6.0, text: "", color: PSColor(r: 251, g: 136, b: 61, a: 1.0)),
+            SliceData(value: 20.0, text: "", color: PSColor(r: 132, g: 193, b: 198, a: 1.0)),
+            SliceData(value: 4, text: "", color: PSColor(r: 225, g: 201, b: 171, a: 1.0))]
         
         pieChartView.layer.borderColor = UIColor.blackColor().CGColor
         pieChartView.layer.borderWidth = 2.0
         // Do any additional setup after loading the view.
         
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        pieChartView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,47 +62,20 @@ class PieChartViewController: UIViewController, PieChartDataSource, PieChartDele
     }
     
     func numberOfSlicesInPieChart(pieChart: PieChartView) -> Int {
-        return kNumberOfSlices
+        return data.count
     }
     
     func textForSlice(pieChar: PieChartView, index: Int) -> String {
-        return String(index)
+        return data[index].text
     }
     
     func valueForSlice(pieChart: PieChartView, index: Int) -> CGFloat {
-        return CGFloat(index+1)
+        return data[index].value
     }
     
     func colorForSlice(pieChart: PieChartView, index: Int) -> UIColor {
-        var color:UIColor
-        let scaledIndex = index % kNumberOfColors
-        switch (index) {
-            case 0:
-                color = PSColor(r: 61, g: 147, b: 147, a: 1.0)
-            case 1:
-                color = PSColor(r: 244, g: 129, b: 128, a: 1.0)
-            case 2:
-                            color = PSColor(r: 182, g: 208, b: 72, a: 1.0)
-            case 3:
-                color = PSColor(r: 251, g: 136, b: 61, a: 1.0)
-        case 4:
-                        color = PSColor(r: 132, g: 193, b: 198, a: 1.0)
-        default:
-                        color = PSColor(r: 225, g: 201, b: 171, a: 1.0)
-        }
-        return color
-//        return UIColor.clearColor()
+        return data[index].color
     }
+
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

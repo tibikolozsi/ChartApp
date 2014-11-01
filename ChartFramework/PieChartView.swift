@@ -8,6 +8,8 @@
 
 import UIKit
 
+let kPieChartFontSize:CGFloat = 12.0
+
 @objc public protocol PieChartDataSource {
     
     func numberOfSlicesInPieChart(pieChart: PieChartView) -> Int
@@ -30,7 +32,7 @@ public class PieChartView: UIView {
     public var delegate:PieChartDelegate?
     
     var startPieAngle:CGFloat = 0.0
-    var animationTime:NSTimeInterval = 0.5
+    var animationTime:NSTimeInterval = 1
     var pieRadius:CGFloat!
         {
         didSet(newPieRadius) {
@@ -43,7 +45,7 @@ public class PieChartView: UIView {
         }
     }
     var showLabel:Bool = true
-    var labelFont:UIFont = UIFont.systemFontOfSize(12.0)
+    var labelFont:UIFont = UIFont.systemFontOfSize(kPieChartFontSize)
     var labelColor:UIColor = UIColor.whiteColor()
     var labelShadowColor:UIColor?
     var labelRadius:CGFloat = 0.0
@@ -63,12 +65,11 @@ public class PieChartView: UIView {
                 if (self.showPercentage) {
                     label = "\(layera.percentage)"
                 } else {
-//                    if (layera.text != nil) {
-//                        label = "\(layera.percentage)"
-//                    } else {
-//                        label = layera.text
-//                    }
-//
+                    if (layera.text.isEmpty) {
+                        label = "\(layera.percentage)"
+                    } else {
+                        label = layera.text
+                    }
                 }
 
                 var size:CGSize = CGSize(width: 100, height: 20)
@@ -85,7 +86,7 @@ public class PieChartView: UIView {
     var selectedSliceIndex:Int = -1
     var pieView:UIView!
     var animationTimer:NSTimer!
-    var animations:Array<CABasicAnimation>!
+    var animations:NSMutableArray!
     
     override public var backgroundColor:UIColor? {
         didSet(newBackgroundColor) {
@@ -97,12 +98,14 @@ public class PieChartView: UIView {
     
     
     class func createArc(center: CGPoint, radius: CGFloat, startAngle: CGFloat, endAngle: CGFloat) -> CGPathRef {
+//        println("createArc startAngle: \(startAngle) endAngle: \(endAngle)")
         var path = UIBezierPath()
         path.lineWidth = 0.0
         path.moveToPoint(center)
         path.addArcWithCenter(center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         path.closePath()
         return path.CGPath
+        
     }
     
     func initAll(frame: CGRect, center: CGPoint = CGPointZero, radius: CGFloat = 0) {
@@ -115,7 +118,7 @@ public class PieChartView: UIView {
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: nil, metrics: nil, views: ["view":self.pieView]))
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: nil, metrics: nil, views: ["view":self.pieView]))
         
-        self.animations = Array<CABasicAnimation>()
+        self.animations = NSMutableArray()
         
         if center == CGPointZero {
             self.pieView.center = CGPoint(x: frame.size.width/2.0, y: frame.size.height/2.0)
@@ -129,7 +132,7 @@ public class PieChartView: UIView {
             self.pieRadius = radius
         }
         
-        self.labelFont = UIFont.boldSystemFontOfSize(max(self.pieRadius/10,5))
+        self.labelFont = UIFont.boldSystemFontOfSize(kPieChartFontSize)
         self.labelRadius = pieRadius/2.0
         self.selectedSliceOffsetRadius = max(10, pieRadius/10)
         
@@ -202,9 +205,7 @@ public class PieChartView: UIView {
             var layersToRemove = NSMutableArray(array:sliceLayers)
             let isOnStart = (sliceLayers.count == 0 && sliceCount > 0)
             let isOnEnd = ((sliceLayers.count > 0) && (sliceCount == 0 || sum <= 0))
-            
-            println("isOnStart:\(isOnStart), isOnEnd:\(isOnEnd)")
-            
+                        
             var diff = sliceCount - sliceLayers.count
             if(isOnEnd) {
                 for layer in pieView.layer.sublayers {
@@ -313,12 +314,14 @@ public class PieChartView: UIView {
         
         for pLayer in pieLayers {
             if let pieLayer = pLayer as? PieSliceLayer {
-                let presentationLayerStartAngle = pieLayer.startAngle
-                let presentationLayerEndAngle = pieLayer.endAngle
+                
+                let presentationLayerStartAngle:CGFloat = pieLayer.presentationLayer().valueForKey("startAngle") as CGFloat
+                let presentationLayerEndAngle:CGFloat = pieLayer.presentationLayer().valueForKey("endAngle") as CGFloat
 
                 let pieCenter = self.pieView.center
+                println("start:\(presentationLayerStartAngle) end:\(presentationLayerEndAngle)")
+                
                 pieLayer.path = PieChartView.createArc(pieCenter, radius: pieRadius, startAngle: presentationLayerStartAngle, endAngle: presentationLayerEndAngle)
-                println(pieLayer)
                 
                 var labelLayer = pieLayer.sublayers.first as CALayer
                 var presentationLayerMidAngle = (presentationLayerEndAngle + presentationLayerStartAngle) / 2.0
@@ -335,13 +338,13 @@ public class PieChartView: UIView {
             animationTimer = NSTimer.scheduledTimerWithTimeInterval(Double(timeInterval), target: self, selector: Selector("updateTimerFired:"), userInfo: nil, repeats: true)
             NSRunLoop.mainRunLoop().addTimer(animationTimer, forMode: NSRunLoopCommonModes)
         }
+        println(anim)
         
-        animations.append(anim as CABasicAnimation)
+        animations.addObject(anim)
     }
     
     override public func animationDidStop(anim: CAAnimation!, finished flag: Bool) {
-        // TODO: fix this
-        animations.removeLast()
+        animations.removeObject(anim)
         
         if (animations.count == 0) {
             animationTimer.invalidate()
@@ -449,8 +452,9 @@ public class PieChartView: UIView {
         var textLayer:CATextLayer = CATextLayer()
         textLayer.contentsScale = UIScreen.mainScreen().scale
         
-        var font:UIFont = UIFont.systemFontOfSize(UIFont.systemFontSize())
+        var font:UIFont = UIFont.systemFontOfSize(kPieChartFontSize)
         textLayer.font = font
+        textLayer.fontSize = kPieChartFontSize
         textLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         textLayer.alignmentMode = kCAAlignmentCenter
         textLayer.backgroundColor = UIColor.clearColor().CGColor
@@ -464,7 +468,7 @@ public class PieChartView: UIView {
         }
         
         let str: String = "0"
-        var size:CGSize = NSString(string: str).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(UIFont.systemFontSize())])
+        var size:CGSize = NSString(string: str).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(kPieChartFontSize)])
         
         CATransaction.setDisableActions(true)
         textLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
@@ -478,35 +482,29 @@ public class PieChartView: UIView {
     }
 
     func updateLabel(pieSliceLayer: PieSliceLayer, value: CGFloat) {
-//        var textLayer:CATextLayer = pieSliceLayer.sublayers[0] as CATextLayer
-//        textLayer.hidden = !showLabel
-//        if (!showLabel) {
-//            return
-//        }
-//        var label:String
-//        if (showPercentage) {
-//            label = "\(pieSliceLayer.percentage*100)"
-//        } else {
-//            label = pieSliceLayer.text.isEmpty ? "\(pieSliceLayer.percentage*100)" : pieSliceLayer.text
-//        }
-//        var size:CGSize = NSString(string: label).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(UIFont.systemFontSize())])
-//        
-//        CATransaction.setDisableActions(true)
-//        if (value <= 0.0 || (CGFloat(M_PI) * 2.0 * labelRadius * pieSliceLayer.percentage < max(size.width,size.height))) {
-//            textLayer.string = ""
-//        } else {
-//            textLayer.string = label
-//            textLayer.bounds = CGRect(origin: CGPointZero, size: size)
-//        }
-//        
-//        CATransaction.setDisableActions(false)
+        var textLayer:CATextLayer = pieSliceLayer.sublayers[0] as CATextLayer
+        textLayer.hidden = !showLabel
+        if (!showLabel) {
+            return
+        }
+        var label:String
+        let doubleToWrite = Double(pieSliceLayer.percentage*100.0)
+        if (showPercentage) {
+            label = String(format: "%.2f%", doubleToWrite) + "%"
+        } else {
+            label = pieSliceLayer.text.isEmpty ? String(format: "%.2f", doubleToWrite) + "%" : pieSliceLayer.text
+        }
+        var size:CGSize = NSString(string: label).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(kPieChartFontSize)])
+        
+        CATransaction.setDisableActions(true)
+        if (value <= 0.0 || (CGFloat(M_PI) * 2.0 * labelRadius * pieSliceLayer.percentage < max(size.width,size.height))) {
+            textLayer.string = ""
+        } else {
+            textLayer.string = label
+            textLayer.bounds = CGRect(origin: CGPointZero, size: size)
+        }
+        
+        CATransaction.setDisableActions(false)
     }
     
-    public override func layoutSublayersOfLayer(layer: CALayer!) {
-        super.layoutSublayersOfLayer(layer)
-
-        for l in layer.sublayers {
-            println("layerFrame:\(l.frame)")            
-        }
-    }
 }
