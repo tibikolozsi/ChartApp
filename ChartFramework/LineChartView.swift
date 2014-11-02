@@ -355,15 +355,15 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 // current LinePoint
                 let point:LinePoint = self.points[i]
                 
-                var text:String
-                if let dataSource = self.dataSource {
-                    text = dataSource.lineChartTextForData!(self, index: i)
+                var textGood:String
+                if let text = self.dataSource?.lineChartTextForData?(self, index: i) {
+                    textGood = text
                 } else {
-                    text = point.text
+                    textGood = point.text
                 }
                 
                 // make label with current text
-                var label = self.makeAxisLabel(CGPoint(x:point.position.x,y:self.horizontalLabelsView.frame.size.height/2.0), labelText: text)
+                var label = self.makeAxisLabel(CGPoint(x:point.position.x,y:self.horizontalLabelsView.frame.size.height/2.0), labelText: textGood)
                 
                 // check if it fits
                 if (self.horizontalLabels.count >= 1 ) {
@@ -435,8 +435,14 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
         // first remove all previous dots
         self.dots.removeAll(keepCapacity: false)
         // add a dot for every point in line
-        for point in points {
-            var dot = DotView(value: point.value, center: point.position, radius: self.dotSize, color: self.dotColor)
+        for (index,point) in enumerate(points) {
+            var goodColor:UIColor
+            if let color = self.dataSource?.lineChartDotColorForData?(self, index: index) {
+                goodColor = color
+            } else {
+                goodColor = self.dotColor
+            }
+            var dot = DotView(value: point.value, center: point.position, radius: self.dotSize, color: goodColor)
             dot.alpha = 0.0 // needed for fading animation
             self.lineView.addSubview(dot)
             self.dots.append(dot)

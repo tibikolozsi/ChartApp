@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChartFramework/LineChartView.swift"
-            timestampString = "436621344.135304"
+            timestampString = "436622856.461171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "525"
-            endingLineNumber = "525"
+            startingLineNumber = "531"
+            endingLineNumber = "531"
             landmarkName = "doubleTapHandler(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChartFramework/LineChartView.swift"
-            timestampString = "436621344.135304"
+            timestampString = "436622856.461171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "489"
-            endingLineNumber = "489"
+            startingLineNumber = "495"
+            endingLineNumber = "495"
             landmarkName = "refreshPoints()"
             landmarkType = "5">
          </BreakpointContent>

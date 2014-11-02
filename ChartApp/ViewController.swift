@@ -79,6 +79,11 @@ class ViewController: UIViewController, UIScrollViewDelegate, LineChartDataSourc
     func lineChartTextForData(lineChart: LineChartView, index: Int) -> String {
         return String(format: "%f",self.values[index])
     }
+    
+    func lineChartDotColorForData(lineChart: LineChartView, index: Int) -> UIColor {
+        return UIColor.whiteColor()
+//        return (index % 2 == 0 ) ? UIColor.blueColor() : UIColor.redColor()
+    }
 
 }
 
