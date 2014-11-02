@@ -44,6 +44,12 @@
                                     <userDefinedRuntimeAttribute type="color" keyPath="dotColor">
                                         <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="gradientBackgroundColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="gradientHighlightedBackgroundColor">
+                                        <color key="value" white="0.66666666666666663" alpha="0.5" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="250" width="800" height="300"/>
@@ -68,10 +74,16 @@
                                 <action selector="changeLineTypeButtonTouched:" destination="BYZ-38-t0r" id="3sn-ai-7kx"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="fcy-ug-Cod">
+                            <connections>
+                                <action selector="addButtonTouched:" destination="BYZ-38-t0r" id="4mc-PT-Z1n"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
+                        <outlet property="AddButton" destination="fcy-ug-Cod" id="uS9-La-fGE"/>
                         <outlet property="changeLineTypeButton" destination="I2K-7C-GrH" id="IhW-H4-ON9"/>
                         <outlet property="lineChartView" destination="khu-BV-5BX" id="qC9-nP-6va"/>
                     </connections>

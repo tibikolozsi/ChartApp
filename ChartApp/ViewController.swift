@@ -13,16 +13,19 @@ import ChartFramework
 let kSimpleLineString = "Simple Line"
 let kBezierCurveString = "Bezier Curve"
 
-class ViewController: UIViewController, UIScrollViewDelegate{
+class ViewController: UIViewController, UIScrollViewDelegate, LineChartDataSource{
     
     @IBOutlet weak var lineChartView: LineChartView!
+    
+    var values = Array<Float>()
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        for i in 1...5 {
+        self.values = Array<Float>()
+        self.lineChartView.dataSource = self
+        for i in 1...50 {
             addRandomValueToLine()
         }
-        self.lineChartView.setNeedsDisplay()
+        self.lineChartView.reloadData()
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -35,6 +38,12 @@ class ViewController: UIViewController, UIScrollViewDelegate{
         // Dispose of any resources that can be recreated.
     }
 
+    @IBOutlet weak var AddButton: UIBarButtonItem!
+    @IBAction func addButtonTouched(sender: AnyObject) {
+        self.addRandomValueToLine()
+        self.lineChartView.reloadData()
+    }
+    
     @IBOutlet weak var changeLineTypeButton: UIBarButtonItem!
     @IBAction func changeLineTypeButtonTouched(sender: AnyObject) {
         if self.lineChartView.lineType == LineType.LineTypeSimple {
@@ -52,12 +61,23 @@ class ViewController: UIViewController, UIScrollViewDelegate{
     func addRandomValueToLine() {
         let lineChartViewHeight: UInt32 = 4000
         var randomValue: Float = Float(arc4random_uniform(lineChartViewHeight))
-        self.lineChartView.addValueToLine(randomValue)
-        self.lineChartView.reloadData()
+        self.values.append(randomValue)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.BlackOpaque
+    }
+    
+    func lineChartNumberOfData(lineChart: LineChartView) -> Int {
+        return self.values.count
+    }
+    
+    func lineChartValueForData(linechart: LineChartView, index: Int) -> Float {
+        return self.values[index]
+    }
+    
+    func lineChartTextForData(lineChart: LineChartView, index: Int) -> String {
+        return String(format: "%f",self.values[index])
     }
 
 }

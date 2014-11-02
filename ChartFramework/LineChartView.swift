@@ -32,7 +32,7 @@ let kDefaultArrayOfPoints:Array<CGPoint> = [CGPoint(x:10.0, y:100),
 @objc public protocol LineChartDataSource {
     
     func lineChartNumberOfData(lineChart: LineChartView) -> Int
-    func lineChartValueForData(linechart: LineChartView, index: Int) -> CGFloat
+    func lineChartValueForData(linechart: LineChartView, index: Int) -> Float
     
     optional func lineChartDotColorForData(lineChart: LineChartView, index: Int) -> UIColor
     optional func lineChartDotSizeForData(lineChart: LineChartView, index: Int) -> CGFloat
@@ -105,11 +105,12 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     var doubleTapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     var pinchGestureRecognizer: UIPinchGestureRecognizer = UIPinchGestureRecognizer()
     
-    var values: Array<Float> = [] {
-        didSet {
-            refreshPoints()
-        }
-    }
+    var values: Array<Float> = []
+//        {
+//        didSet {
+//            refreshPoints()
+//        }
+//    }
     
     var dots:Array<DotView> = Array<DotView>()
     
@@ -220,7 +221,17 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     // MARK: Drawing methods
     
     public func reloadData() {
-        self.setNeedsDisplay()
+        if let dataSource = self.dataSource {
+            let dataCount = dataSource.lineChartNumberOfData(self)
+            
+            // Extract values from dataSource, calculate sum of values
+            self.values = Array<Float>()
+            for index in 0..<dataCount {
+                var value = dataSource.lineChartValueForData(self, index: index)
+                self.addValueToLine(value)
+            }
+            self.setNeedsDisplay()
+        }
     }
     
     override public func drawRect(rect: CGRect) {
@@ -344,8 +355,15 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
                 // current LinePoint
                 let point:LinePoint = self.points[i]
                 
+                var text:String
+                if let dataSource = self.dataSource {
+                    text = dataSource.lineChartTextForData!(self, index: i)
+                } else {
+                    text = point.text
+                }
+                
                 // make label with current text
-                var label = self.makeAxisLabel(CGPoint(x:point.position.x,y:self.horizontalLabelsView.frame.size.height/2.0), labelText: point.text)
+                var label = self.makeAxisLabel(CGPoint(x:point.position.x,y:self.horizontalLabelsView.frame.size.height/2.0), labelText: text)
                 
                 // check if it fits
                 if (self.horizontalLabels.count >= 1 ) {
@@ -506,7 +524,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     func doubleTapHandler(recognizer:UIPanGestureRecognizer){
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        addRandomValueToLine()
+//        addRandomValueToLine()
     }
     
     // pan handler, for showing current values
@@ -660,7 +678,6 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             }
         }
         self.values.append(value)
-        self.setNeedsDisplay()
     }
     
     func addRandomValueToLine() {
