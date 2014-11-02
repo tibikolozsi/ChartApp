@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum LineType {
+public enum LineType {
     case LineTypeSimple
     case LineTypeSpline
 }

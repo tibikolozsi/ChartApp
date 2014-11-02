@@ -354,33 +354,73 @@ public class PieChartView: UIView {
     
     // MARK: - Touch Handing (Selection Notification)
     func getCurrentSelectedOnTouch(point: CGPoint) -> Int {
-        return Int(0)
+        var selectedIndex = -1 // currently nothing is selected
+//        CGAffineTransform transform = CGAffineTransformIdentity
+        let parentLayer = self.pieView.layer
+        let pieLayers = parentLayer.sublayers
+        for (index,pl) in enumerate(pieLayers) {
+            if let pieLayer = pl as? PieSliceLayer {
+                let path = pieLayer.path
+                
+                if(CGPathContainsPoint(path, nil, point, false)){
+                    pieLayer.lineWidth = selectedSliceStroke
+                    pieLayer.strokeColor = UIColor.whiteColor().CGColor
+                    pieLayer.lineJoin = kCALineJoinBevel
+                    pieLayer.zPosition = CGFloat(MAXFLOAT)
+                    selectedIndex = index
+                } else {
+                    pieLayer.zPosition = kDefaultSliceZOrder
+                    pieLayer.lineWidth = 0.0
+                }
+            }
+        }
+        return selectedIndex
     }
     
     override public func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        
+        self.touchesMoved(touches, withEvent: event)
     }
 
     override public func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        
+        let t: AnyObject? = touches.anyObject()
+        if let touch = t as? UITouch {
+            let point = touch.locationInView(self.pieView)
+            self.getCurrentSelectedOnTouch(point)
+        }
     }
     
     override public func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        
+        let t: AnyObject? = touches.anyObject()
+        if let touch = t as? UITouch {
+            let point = touch.locationInView(self.pieView)
+            let selectedIndex = self.getCurrentSelectedOnTouch(point)
+            self.notifyDelegateOfSelectionChange(selectedSliceIndex, newSel: selectedIndex)
+            self.touchesCancelled(touches, withEvent: event)
+        }
     }
     
     override public func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
-        
+        let parentLayer = self.pieView.layer
+        let pieLayers = parentLayer.sublayers
+        for pl in pieLayers {
+            if let pieLayer = pl as? PieSliceLayer {
+                pieLayer.zPosition = kDefaultSliceZOrder
+                pieLayer.lineWidth = 0.0
+            }
+        }
     }
     
     // MARK: - Selection Notification
     
-    func notifyDelegateOfSelectionChange(previousSelection: Int, newSelection: Int) {
-        if (previousSelection == newSelection) {
+    func notifyDelegateOfSelectionChange(previousSel: Int, newSel: Int) {
+        var previousSelection = previousSel
+        var newSelection = newSel
+        if (previousSelection != newSelection) {
             if (previousSelection != -1) {
                 let savedPrevious = previousSelection;
                 delegate?.pieChartWillDeselectSlice?(savedPrevious)
                 self.setSliceDeselected(savedPrevious)
+                previousSelection = newSelection
                 delegate?.pieChartDidDeselectSlice?(savedPrevious)
             }
             
@@ -397,11 +437,13 @@ public class PieChartView: UIView {
                     delegate?.pieChartWillDeselectSlice?(newSelection)
                     self.setSliceDeselected(newSelection)
                     delegate?.pieChartDidDeselectSlice?(newSelection)
+                    previousSelection = -1
                     selectedSliceIndex = -1
                 } else {
                     delegate?.pieChartWillSelectSlice?(newSelection)
                     self.setSliceSelected(newSelection)
                     selectedSliceIndex = newSelection
+                    previousSelection = newSelection
                     if (newSelection != -1) {
                         delegate?.pieChartDidSelectSlice?(newSelection)
                     }
@@ -416,7 +458,7 @@ public class PieChartView: UIView {
         if (selectedSliceOffsetRadius <= 0) {
             return
         } else {
-            var layer:PieSliceLayer = pieView.layer.sublayers[0] as PieSliceLayer
+            var layer:PieSliceLayer = pieView.layer.sublayers[index] as PieSliceLayer
             if (!layer.isSelected) {
                 var currPos = layer.position
                 var middleAngle = (layer.startAngle + layer.endAngle)/2.0
@@ -435,7 +477,7 @@ public class PieChartView: UIView {
         if (selectedSliceOffsetRadius <= 0) {
             return
         } else {
-            var layer:PieSliceLayer = pieView.layer.sublayers[0] as PieSliceLayer
+            var layer:PieSliceLayer = pieView.layer.sublayers[index] as PieSliceLayer
             if (layer.isSelected) {
                 layer.position = CGPointZero
                 layer.isSelected = false

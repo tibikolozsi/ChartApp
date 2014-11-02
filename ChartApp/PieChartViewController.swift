@@ -18,6 +18,10 @@ class PieChartViewController: UIViewController, PieChartDataSource, PieChartDele
     
     var data: Array<SliceData> = Array<SliceData>()
     
+    @IBAction func addDataButtonTouched(sender: AnyObject) {
+        data.append(SliceData(value: 5.0, text: "", color: UIColor.redColor()))
+        self.pieChartView.reloadData()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         pieChartView.dataSource = self
@@ -30,8 +34,6 @@ class PieChartViewController: UIViewController, PieChartDataSource, PieChartDele
             SliceData(value: 20.0, text: "", color: PSColor(r: 132, g: 193, b: 198, a: 1.0)),
             SliceData(value: 4, text: "", color: PSColor(r: 225, g: 201, b: 171, a: 1.0))]
         
-        pieChartView.layer.borderColor = UIColor.blackColor().CGColor
-        pieChartView.layer.borderWidth = 2.0
         // Do any additional setup after loading the view.
         
     }

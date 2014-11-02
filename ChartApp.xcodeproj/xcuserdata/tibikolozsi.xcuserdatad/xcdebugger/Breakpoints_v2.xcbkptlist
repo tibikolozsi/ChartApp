@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChartApp/ViewController.swift"
-            timestampString = "435439523.770579"
+            timestampString = "436609325.717011"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -80,22 +80,6 @@
             startingLineNumber = "112"
             endingLineNumber = "112"
             landmarkName = "initAll(_:center:radius:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChartFramework/PieSliceLayer.swift"
-            timestampString = "436556256.07505"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "init(layer:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

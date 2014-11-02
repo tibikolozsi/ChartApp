@@ -9,8 +9,23 @@
 import UIKit
 import ChartFramework
 
-class ViewController: UIViewController, UIScrollViewDelegate{
 
+let kSimpleLineString = "Simple Line"
+let kBezierCurveString = "Bezier Curve"
+
+class ViewController: UIViewController, UIScrollViewDelegate{
+    var lineType:LineType = LineType.LineTypeSpline {
+        didSet(newType) {
+            if let button = self.changeLineTypeButton {
+                if newType == LineType.LineTypeSimple {
+                    button.title = kSimpleLineString
+                } else if newType == LineType.LineTypeSpline {
+                    button.title = kBezierCurveString
+                }
+            }
+        }
+    }
+    
     @IBOutlet weak var lineChartView: LineChartView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,15 +50,24 @@ class ViewController: UIViewController, UIScrollViewDelegate{
         self.lineChartView.setNeedsDisplay()
     }
 
+    @IBOutlet weak var changeLineTypeButton: UIBarButtonItem!
+    @IBAction func changeLineTypeButtonTouched(sender: AnyObject) {
+        if self.lineType == LineType.LineTypeSimple {
+            self.lineType = LineType.LineTypeSpline
+        } else if self.lineType == LineType.LineTypeSpline {
+            self.lineType = LineType.LineTypeSimple
+        }
+        self.lineChartView.setNeedsDisplay()
+    }
     @IBAction func addNewPointToLine(sender: AnyObject) {
         addRandomValueToLine()
     }
     
     func addRandomValueToLine() {
         let lineChartViewHeight: UInt32 = 4000
-        println(self.lineChartView.frame.height)
+//        println(self.lineChartView.frame.height)
         var randomValue: Float = Float(arc4random_uniform(lineChartViewHeight))
-        println("added value: \(randomValue)")
+//        println("added value: \(randomValue)")
         self.lineChartView.addValueToLine(randomValue)
     }
     

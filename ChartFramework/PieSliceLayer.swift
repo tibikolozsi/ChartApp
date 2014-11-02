@@ -60,14 +60,14 @@ public class PieSliceLayer: CAShapeLayer {
         arcAnimation.fromValue = currentAngle
         arcAnimation.toValue = toValue
         
-        println("from: \(fromValue) current: \(currentAngle) to: \(toValue)")
+//        println("from: \(fromValue) current: \(currentAngle) to: \(toValue)")
         arcAnimation.delegate = delegate
         arcAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
         self.addAnimation(arcAnimation, forKey: key)
 
-        println()
-        println("beforeSet : \(endAngle)")
+//        println()
+//        println("beforeSet : \(endAngle)")
         self.setValue(toValue, forKey: key)
-        println("afterSet : \(endAngle)")
+//        println("afterSet : \(endAngle)")
     }
 }
