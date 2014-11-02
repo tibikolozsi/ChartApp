@@ -25,14 +25,14 @@ public class InterractionView: UIView {
         Logger.Log(className: "InterractionView")
     }
 
-    override init(frame: CGRect)
+    init(frame: CGRect, lineColor: UIColor, backgroundColor:UIColor)
     {
         Logger.Log(className: "InterractionView")
         self.pin = DotView(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
         self.line = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: self.frame.height))
-        self.line.backgroundColor = UIColor.whiteColor()
+        self.line.backgroundColor = lineColor
         self.line.alpha = 1
 
         self.addSubview(self.line)
@@ -47,7 +47,7 @@ public class InterractionView: UIView {
         self.info = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
         self.info.layer.cornerRadius = 10.0
         self.info.center.x = self.line.center.x
-        self.info.backgroundColor = UIColor.lightGrayColor()
+        self.info.backgroundColor = backgroundColor
         self.infoLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
         infoLabel.textAlignment = NSTextAlignment.Center
         infoLabel.text = "text"
@@ -60,12 +60,5 @@ public class InterractionView: UIView {
         self.pin = DotView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         super.init(coder: aDecoder)
     }
-    
-//    override func hitTest(point: CGPoint, withEvent event: UIEvent!) -> UIView!
-//    {
-//        var view : UIView = self.superview
-//        return view.viewWithTag(99)
-//        
-//    }
 
 }

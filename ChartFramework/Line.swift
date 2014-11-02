@@ -36,7 +36,6 @@ class Line {
     }
     
     func calculateLinePath(type:LineType = LineType.LineTypeSimple) {
-
         if self.points.count < 2 {
             return
         }

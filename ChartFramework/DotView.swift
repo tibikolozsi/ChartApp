@@ -9,8 +9,7 @@
 import UIKit
 
 class DotView: UIView {
-
-    var shouldDisplayConstantly: Bool = true
+    
     var color: UIColor = UIColor.whiteColor(){
         didSet{
             self.setNeedsDisplay()
@@ -25,6 +24,14 @@ class DotView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
+    }
+    
+    init(value: Float, center:CGPoint, radius:CGFloat, color:UIColor) {
+        super.init(frame: CGRect(origin: CGPointZero, size: CGSize(width: radius, height: radius)))
+        self.center = center
+        self.value = value
+        self.backgroundColor = UIColor.clearColor()
+        self.color = color
     }
     
     required init(coder aDecoder: NSCoder) {
