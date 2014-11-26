@@ -31,7 +31,7 @@ class Line {
         self.points = points
         self.path = UIBezierPath()
         self.lineType = type
-
+        
         calculateLinePath(type: type)
     }
     
@@ -92,7 +92,7 @@ class Line {
         }
     }
     
-
+    
 }
 
 extension CGPoint {

@@ -19,12 +19,12 @@ public class InterractionView: UIView {
             self.infoLabel.text = text
         }
     }
-
+    
     public override func drawRect(rect: CGRect)
     {
         Logger.Log(className: "InterractionView")
     }
-
+    
     init(frame: CGRect, lineColor: UIColor, backgroundColor:UIColor)
     {
         Logger.Log(className: "InterractionView")
@@ -34,12 +34,12 @@ public class InterractionView: UIView {
         self.line = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: self.frame.height))
         self.line.backgroundColor = lineColor
         self.line.alpha = 1
-
+        
         self.addSubview(self.line)
-
+        
         self.addConstraint(NSLayoutConstraint(item: self.line, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: self, attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0))
         self.layoutIfNeeded()
-
+        
         self.pin.color = UIColor.blueColor()
         self.pin.center.x = self.line.center.x
         self.addSubview(self.pin)
@@ -60,5 +60,5 @@ public class InterractionView: UIView {
         self.pin = DotView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         super.init(coder: aDecoder)
     }
-
+    
 }

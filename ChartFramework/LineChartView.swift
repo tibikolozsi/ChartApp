@@ -106,16 +106,18 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     var pinchGestureRecognizer: UIPinchGestureRecognizer = UIPinchGestureRecognizer()
     
     var values: Array<Float> = []
-//        {
-//        didSet {
-//            refreshPoints()
-//        }
-//    }
+    //        {
+    //        didSet {
+    //            refreshPoints()
+    //        }
+    //    }
     
     var dots:Array<DotView> = Array<DotView>()
     
     var maxValue:Float = 0.0
     var minValue:Float = 0.0
+    @IBInspectable var preferedMinValue:Float = 0.0
+    @IBInspectable var preferedMaxValue:Float = 0.0
     
     var line:Line = Line()
     var points:Array<LinePoint> = Array<LinePoint>()
@@ -382,14 +384,31 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             
             // sort points for drawing every diff. lines (eg. only 2nd lines)
             let sortedPoints = sorted(self.points, { (p1:LinePoint, p2:LinePoint) -> Bool in
-                return p1.position.y > p2.position.y
+                return p1.position.y >= p2.position.y
             })
             
-            // draw first horizontal line at y=0
-            var leftEnd:CGPoint = CGPointMake(0, 0)
-            var rightEnd:CGPoint = CGPointMake(self.lineView.frame.size.width, 0)
-            referenceLinePath.moveToPoint(leftEnd)
-            referenceLinePath.addLineToPoint(rightEnd)
+            if (self.hasPredefinedMargins()) {
+                // draw first horizontal line at y=0
+                var leftEnd:CGPoint = CGPointMake(0, 0)
+                var rightEnd:CGPoint = CGPointMake(self.lineView.frame.size.width, 0)
+                referenceLinePath.moveToPoint(leftEnd)
+                referenceLinePath.addLineToPoint(rightEnd)
+                
+                var label = self.makeAxisLabel(CGPoint(x:self.verticalLabelsView.frame.size.width/2.0,y:0), labelText: String("\(self.preferedMaxValue)"))
+                self.verticalLabels.append(label)
+                self.verticalLabelsView.addSubview(label)
+                
+                // draw last horizontal line at y=maxheight
+                leftEnd = CGPointMake(0, self.lineView.frame.size.height)
+                rightEnd = CGPointMake(self.lineView.frame.size.width, self.lineView.frame.size.height)
+                referenceLinePath.moveToPoint(leftEnd)
+                referenceLinePath.addLineToPoint(rightEnd)
+                
+                label = self.makeAxisLabel(CGPoint(x:self.verticalLabelsView.frame.size.width/2.0,y:self.lineView.frame.size.height), labelText: String("\(self.preferedMinValue)"))
+                self.verticalLabels.append(label)
+                self.verticalLabelsView.addSubview(label)
+            }
+            
             
             // draw horizontal lines
             for var i = 0; i < sortedPoints.count; i+=self.axisLabelDiff {
@@ -478,11 +497,27 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     // scales all points relative to the current frame
     func refreshPoints() {
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-        let oldMin:Float = self.minValue < 0 ? Float(self.minValue) : 0
-        let oldMax:Float = Float(self.maxValue)
-        let newMargin:Float = 10.0
-        let newMin:Float = Float(0.0) + newMargin
-        let newMax:Float = Float(self.lineView.frame.size.height) - newMargin
+        var oldMin:Float
+        var oldMax:Float
+        if (self.hasPredefinedMargins()) {
+            oldMax = self.preferedMaxValue
+            oldMin = self.preferedMinValue
+        } else {
+            oldMin = self.minValue
+            oldMax = Float(self.maxValue)
+            if (oldMin == oldMax) {
+                oldMin = oldMin - 10
+                oldMax = oldMax + 10
+            }
+        }
+        
+        let newMargin:Float = 0.0
+        var newMin:Float
+        var newMax:Float
+        
+        newMin = Float(0.0)  + newMargin
+        newMax = Float(self.lineView.frame.size.height)  - newMargin
+        
         var oldRange:Float = Float(oldMax) - Float(oldMin)
         let newRange:Float = newMax - newMin
         self.points = Array<LinePoint>()
@@ -493,6 +528,10 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
             self.points.append(pointToAdd)
         }
         self.setNeedsDisplay()
+    }
+    
+    func hasPredefinedMargins() -> Bool {
+        return self.preferedMaxValue != self.preferedMinValue
     }
     
     
@@ -530,7 +569,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     func doubleTapHandler(recognizer:UIPanGestureRecognizer){
         Logger.Log(className: NSStringFromClass(self.classForCoder))
-//        addRandomValueToLine()
+        //        addRandomValueToLine()
     }
     
     // pan handler, for showing current values

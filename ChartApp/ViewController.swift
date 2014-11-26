@@ -60,7 +60,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, LineChartDataSourc
     
     func addRandomValueToLine() {
         let lineChartViewHeight: UInt32 = 4000
-        var randomValue: Float = Float(arc4random_uniform(lineChartViewHeight))
+        var randomValue: Float = Float(arc4random_uniform(lineChartViewHeight))-2000
         self.values.append(randomValue)
     }
     
