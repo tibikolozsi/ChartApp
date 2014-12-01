@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--LineChart-->
@@ -22,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="719"/>
                             </imageView>
                             <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="khu-BV-5BX" customClass="LineChartView" customModule="ChartFramework">
-                                <rect key="frame" x="0.0" y="94" width="1004" height="615"/>
+                                <rect key="frame" x="0.0" y="124" width="1004" height="585"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="enableReferenceLine" value="YES"/>
@@ -36,7 +37,7 @@
                                         <real key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="animationTime">
-                                        <real key="value" value="4"/>
+                                        <real key="value" value="2"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="dotSize">
                                         <real key="value" value="8"/>
@@ -50,17 +51,22 @@
                                     <userDefinedRuntimeAttribute type="color" keyPath="gradientHighlightedBackgroundColor">
                                         <color key="value" white="0.66666666666666663" alpha="0.5" colorSpace="calibratedWhite"/>
                                     </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="preferedMinValue">
-                                        <real key="value" value="-4000"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="preferedMaxValue">
-                                        <real key="value" value="4000"/>
-                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="0.0" y="250" width="800" height="300"/>
                                 </variation>
                             </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="h5d-pb-04k">
+                                <rect key="frame" x="778" y="72" width="230" height="29"/>
+                                <segments>
+                                    <segment title="Daily"/>
+                                    <segment title="Default"/>
+                                </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="forecastTypeChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="oax-Rw-Fm6"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -70,33 +76,76 @@
                             <constraint firstAttribute="trailing" secondItem="Da6-U2-A9Y" secondAttribute="trailing" id="XEi-ds-ZFa"/>
                             <constraint firstItem="khu-BV-5BX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="cdv-GI-Ww6"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Da6-U2-A9Y" secondAttribute="bottom" id="d1s-iO-rPs"/>
-                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="xOy-g3-ap0"/>
+                            <constraint firstItem="khu-BV-5BX" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="60" id="xOy-g3-ap0"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="khu-BV-5BX" secondAttribute="bottom" constant="10" id="xsq-tn-ZFF"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="hKe-GS-NPt">
+                    <navigationItem key="navigationItem" title="City title" id="hKe-GS-NPt">
                         <barButtonItem key="leftBarButtonItem" title="Simple Line" id="I2K-7C-GrH">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="changeLineTypeButtonTouched:" destination="BYZ-38-t0r" id="3sn-ai-7kx"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="fcy-ug-Cod">
+                        <barButtonItem key="rightBarButtonItem" title="Choose" style="plain" id="STg-n2-jZB">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <action selector="addButtonTouched:" destination="BYZ-38-t0r" id="4mc-PT-Z1n"/>
+                                <segue destination="MPI-pS-uwa" kind="popoverPresentation" identifier="ChooseCitySegue" popoverAnchorBarButtonItem="STg-n2-jZB" id="z9V-6N-vEC">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES"/>
+                                </segue>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
-                        <outlet property="AddButton" destination="fcy-ug-Cod" id="uS9-La-fGE"/>
                         <outlet property="changeLineTypeButton" destination="I2K-7C-GrH" id="IhW-H4-ON9"/>
+                        <outlet property="forecastTypeSegementedControl" destination="h5d-pb-04k" id="vMN-rC-t2G"/>
                         <outlet property="lineChartView" destination="khu-BV-5BX" id="qC9-nP-6va"/>
+                        <outlet property="navItem" destination="hKe-GS-NPt" id="HGB-K6-iCy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2431" y="1039"/>
+            <point key="canvasLocation" x="2324" y="1039"/>
+        </scene>
+        <!--Choose View Controller-->
+        <scene sceneID="84n-R8-tn8">
+            <objects>
+                <viewController id="MPI-pS-uwa" customClass="ChooseViewController" customModule="ChartApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ZU8-fH-6hV"/>
+                        <viewControllerLayoutGuide type="bottom" id="4QR-oA-yCK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9NJ-Cs-MFv">
+                        <rect key="frame" x="0.0" y="0.0" width="200" height="300"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nfb-KU-m6h">
+                                <rect key="frame" x="0.0" y="42" width="200" height="216"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="MPI-pS-uwa" id="Gb5-zX-0GQ"/>
+                                    <outlet property="delegate" destination="MPI-pS-uwa" id="BU5-U6-6wY"/>
+                                </connections>
+                            </pickerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="nfb-KU-m6h" secondAttribute="trailing" id="Ack-EK-cd2"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="nfb-KU-m6h" secondAttribute="bottom" id="NcI-Wb-uXe"/>
+                            <constraint firstItem="nfb-KU-m6h" firstAttribute="top" secondItem="9NJ-Cs-MFv" secondAttribute="topMargin" id="bzh-nf-pgM"/>
+                            <constraint firstItem="nfb-KU-m6h" firstAttribute="leading" secondItem="9NJ-Cs-MFv" secondAttribute="leading" id="cW2-vY-w6n"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="200" height="300"/>
+                    <connections>
+                        <outlet property="pickerView" destination="nfb-KU-m6h" id="kvn-0G-QGz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KPd-H6-RNk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3321" y="687"/>
         </scene>
         <!--PieChart-->
         <scene sceneID="EOb-OY-1F9">
@@ -111,18 +160,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SbZ-zM-YeF" customClass="PieChartView" customModule="ChartFramework">
-                                <rect key="frame" x="212" y="84" width="600" height="600"/>
+                                <rect key="frame" x="20" y="84" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="600" id="Q5c-35-DD6"/>
                                     <constraint firstAttribute="width" secondItem="SbZ-zM-YeF" secondAttribute="height" multiplier="1:1" id="zva-Gb-3IS"/>
                                 </constraints>
                             </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="TW2-Gi-3s7" customClass="PieChartLegendView" customModule="ChartFramework">
+                                <rect key="frame" x="804" y="499" width="200" height="200"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="VqK-DB-UWb"/>
+                                    <constraint firstAttribute="width" constant="200" id="wht-hx-59L"/>
+                                </constraints>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="SbZ-zM-YeF" secondAttribute="centerY" id="6Hu-f1-ibM"/>
-                            <constraint firstAttribute="centerX" secondItem="SbZ-zM-YeF" secondAttribute="centerX" id="bOY-FY-Ikm"/>
+                            <constraint firstItem="uOH-Vm-L6g" firstAttribute="top" secondItem="TW2-Gi-3s7" secondAttribute="bottom" constant="20" id="HkY-xV-IbU"/>
+                            <constraint firstAttribute="trailing" secondItem="TW2-Gi-3s7" secondAttribute="trailing" constant="20" id="QbZ-Eq-Ncg"/>
+                            <constraint firstItem="SbZ-zM-YeF" firstAttribute="leading" secondItem="bmn-AR-vCK" secondAttribute="leading" constant="20" id="YHW-bn-vks"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Qmc-kp-X7S">
@@ -135,6 +194,7 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
+                        <outlet property="pieChartLegend" destination="TW2-Gi-3s7" id="ueo-rs-aSx"/>
                         <outlet property="pieChartView" destination="SbZ-zM-YeF" id="K3d-Av-tix"/>
                     </connections>
                 </viewController>
@@ -160,6 +220,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hU9-sa-qtI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1425" y="82"/>
+        </scene>
+        <!--Weather View Controller-->
+        <scene sceneID="H2T-Cg-MOl">
+            <objects>
+                <viewController id="aHl-u7-rca" customClass="WeatherViewController" customModule="ChartApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="JeY-Ds-9f8"/>
+                        <viewControllerLayoutGuide type="bottom" id="66k-kv-Ufa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dje-Ik-Itr">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="94f-BP-5HF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-69" y="411"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="rDC-4b-EHU">

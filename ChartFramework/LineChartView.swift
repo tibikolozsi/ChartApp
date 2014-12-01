@@ -76,7 +76,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     @IBInspectable var gradientHighlightedBackgroundColor:UIColor = UIColor.greenColor()
     
     // axis label steps
-    @IBInspectable  var axisLabelDiff:Int = 2
+    @IBInspectable  public var axisLabelDiff:Int = 2
     
     
     // views
@@ -224,6 +224,7 @@ public class LineChartView: UIView, UIGestureRecognizerDelegate{
     
     public func reloadData() {
         if let dataSource = self.dataSource {
+            println("reloading data ...")
             let dataCount = dataSource.lineChartNumberOfData(self)
             
             // Extract values from dataSource, calculate sum of values

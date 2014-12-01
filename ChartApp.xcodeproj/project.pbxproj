@@ -23,14 +23,19 @@
 		674A580B19FEDA480073A1AE /* PieChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A580A19FEDA480073A1AE /* PieChartViewController.swift */; };
 		674A580D19FEDA6B0073A1AE /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A580C19FEDA6B0073A1AE /* PieChartView.swift */; };
 		674A581119FEDD0E0073A1AE /* PieSliceLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674A581019FEDD0E0073A1AE /* PieSliceLayer.swift */; };
+		674B393F1A2B3EAB006DE546 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674B393E1A2B3EAB006DE546 /* WeatherViewController.swift */; };
+		6760430A1A2BB3ED005CE8EF /* ChooseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676043091A2BB3ED005CE8EF /* ChooseViewController.swift */; };
 		6794A14419DF22BF007027BA /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6794A14319DF22BF007027BA /* Line.swift */; };
 		6794A14619DF2DDE007027BA /* LinePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6794A14519DF2DDE007027BA /* LinePoint.swift */; };
 		679861E319DDC4EC0095EA40 /* InterractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679861E219DDC4EC0095EA40 /* InterractionView.swift */; };
+		67AC23BF1A2B574D00AEDE4A /* TempData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AC23BE1A2B574D00AEDE4A /* TempData.swift */; };
 		67B276B71A050CB500DF5EFA /* MathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B276B61A050CB500DF5EFA /* MathHelper.swift */; };
 		67B276BB1A052B0800DF5EFA /* PSColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B276BA1A052B0800DF5EFA /* PSColor.swift */; };
 		67B276BD1A0539BA00DF5EFA /* SliceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B276BC1A0539BA00DF5EFA /* SliceData.swift */; };
+		67CA73BD1A2CF2E0003A48A8 /* PieChartLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67CA73BC1A2CF2E0003A48A8 /* PieChartLegendView.swift */; };
 		67D38FD419D86C920067FEE5 /* DotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D38FD319D86C920067FEE5 /* DotView.swift */; };
 		67D38FD619D87FD20067FEE5 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D38FD519D87FD20067FEE5 /* Logger.swift */; };
+		FE3BDB2C11F500D69AD3F073 /* libPods-ChartApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E03F3DA6E1729EB079310111 /* libPods-ChartApp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,14 +111,22 @@
 		674A580A19FEDA480073A1AE /* PieChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieChartViewController.swift; sourceTree = "<group>"; };
 		674A580C19FEDA6B0073A1AE /* PieChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		674A581019FEDD0E0073A1AE /* PieSliceLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieSliceLayer.swift; sourceTree = "<group>"; };
+		674B393E1A2B3EAB006DE546 /* WeatherViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		674B39401A2B3F07006DE546 /* ChartApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ChartApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		676043091A2BB3ED005CE8EF /* ChooseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseViewController.swift; sourceTree = "<group>"; };
 		6794A14319DF22BF007027BA /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		6794A14519DF2DDE007027BA /* LinePoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinePoint.swift; sourceTree = "<group>"; };
 		679861E219DDC4EC0095EA40 /* InterractionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterractionView.swift; sourceTree = "<group>"; };
+		67AC23BE1A2B574D00AEDE4A /* TempData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempData.swift; sourceTree = "<group>"; };
 		67B276B61A050CB500DF5EFA /* MathHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathHelper.swift; sourceTree = "<group>"; };
 		67B276BA1A052B0800DF5EFA /* PSColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSColor.swift; sourceTree = "<group>"; };
 		67B276BC1A0539BA00DF5EFA /* SliceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliceData.swift; sourceTree = "<group>"; };
+		67CA73BC1A2CF2E0003A48A8 /* PieChartLegendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieChartLegendView.swift; sourceTree = "<group>"; };
 		67D38FD319D86C920067FEE5 /* DotView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotView.swift; sourceTree = "<group>"; };
 		67D38FD519D87FD20067FEE5 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		DC2F769B8A5BA1CE74C3391E /* Pods-ChartApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChartApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChartApp/Pods-ChartApp.debug.xcconfig"; sourceTree = "<group>"; };
+		E03F3DA6E1729EB079310111 /* libPods-ChartApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChartApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E852F1C7F227D78CFFB87824 /* Pods-ChartApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChartApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChartApp/Pods-ChartApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6712AAF619D828D700A2E842 /* ChartFramework.framework in Frameworks */,
+				FE3BDB2C11F500D69AD3F073 /* libPods-ChartApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +164,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		25FC96376DC32D886FF1E6EF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DC2F769B8A5BA1CE74C3391E /* Pods-ChartApp.debug.xcconfig */,
+				E852F1C7F227D78CFFB87824 /* Pods-ChartApp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		6712AAAC19D828C700A2E842 = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +181,8 @@
 				6712AAE019D828D700A2E842 /* ChartFramework */,
 				6712AAEF19D828D700A2E842 /* ChartFrameworkTests */,
 				6712AAB619D828C700A2E842 /* Products */,
+				25FC96376DC32D886FF1E6EF /* Pods */,
+				C30E9DC0EDEF85B1F4510E2D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -182,6 +207,10 @@
 				6712AAC119D828C700A2E842 /* Images.xcassets */,
 				6712AAC319D828C700A2E842 /* LaunchScreen.xib */,
 				6712AAB819D828C700A2E842 /* Supporting Files */,
+				674B393E1A2B3EAB006DE546 /* WeatherViewController.swift */,
+				674B39401A2B3F07006DE546 /* ChartApp-Bridging-Header.h */,
+				67AC23BE1A2B574D00AEDE4A /* TempData.swift */,
+				676043091A2BB3ED005CE8EF /* ChooseViewController.swift */,
 			);
 			path = ChartApp;
 			sourceTree = "<group>";
@@ -256,6 +285,7 @@
 				674A580C19FEDA6B0073A1AE /* PieChartView.swift */,
 				674A581019FEDD0E0073A1AE /* PieSliceLayer.swift */,
 				67B276BC1A0539BA00DF5EFA /* SliceData.swift */,
+				67CA73BC1A2CF2E0003A48A8 /* PieChartLegendView.swift */,
 			);
 			name = "Pie Chart";
 			sourceTree = "<group>";
@@ -270,6 +300,14 @@
 				679861E219DDC4EC0095EA40 /* InterractionView.swift */,
 			);
 			name = "Line Chart";
+			sourceTree = "<group>";
+		};
+		C30E9DC0EDEF85B1F4510E2D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E03F3DA6E1729EB079310111 /* libPods-ChartApp.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,10 +329,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6712AAD419D828C700A2E842 /* Build configuration list for PBXNativeTarget "ChartApp" */;
 			buildPhases = (
+				D29D19296CFE2F3C1CC7E455 /* Check Pods Manifest.lock */,
 				6712AAB119D828C700A2E842 /* Sources */,
 				6712AAB219D828C700A2E842 /* Frameworks */,
 				6712AAB319D828C700A2E842 /* Resources */,
 				6712AAFD19D828D700A2E842 /* Embed Frameworks */,
+				79D686945952929CA7019CAA /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -442,14 +482,50 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		79D686945952929CA7019CAA /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChartApp/Pods-ChartApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D29D19296CFE2F3C1CC7E455 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6712AAB119D828C700A2E842 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				674A580B19FEDA480073A1AE /* PieChartViewController.swift in Sources */,
+				674B393F1A2B3EAB006DE546 /* WeatherViewController.swift in Sources */,
 				6712AABD19D828C700A2E842 /* ViewController.swift in Sources */,
 				6712AABB19D828C700A2E842 /* AppDelegate.swift in Sources */,
+				67AC23BF1A2B574D00AEDE4A /* TempData.swift in Sources */,
+				6760430A1A2BB3ED005CE8EF /* ChooseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				674A580D19FEDA6B0073A1AE /* PieChartView.swift in Sources */,
+				67CA73BD1A2CF2E0003A48A8 /* PieChartLegendView.swift in Sources */,
 				674A581119FEDD0E0073A1AE /* PieSliceLayer.swift in Sources */,
 				6794A14619DF2DDE007027BA /* LinePoint.swift in Sources */,
 				67B276B71A050CB500DF5EFA /* MathHelper.swift in Sources */,
@@ -618,17 +695,20 @@
 		};
 		6712AAD519D828C700A2E842 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC2F769B8A5BA1CE74C3391E /* Pods-ChartApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ChartApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "ChartApp/ChartApp-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		6712AAD619D828C700A2E842 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E852F1C7F227D78CFFB87824 /* Pods-ChartApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = ChartApp/Info.plist;

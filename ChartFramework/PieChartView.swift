@@ -8,7 +8,7 @@
 
 import UIKit
 
-let kPieChartFontSize:CGFloat = 12.0
+let kPieChartFontSize:CGFloat = 18.0
 
 @objc public protocol PieChartDataSource {
     
@@ -26,10 +26,11 @@ let kPieChartFontSize:CGFloat = 12.0
     optional func pieChartDidDeselectSlice(index: Int)
 }
 
-public class PieChartView: UIView {
+public class PieChartView: UIView, UITableViewDataSource, UITableViewDelegate {
     let kDefaultSliceZOrder:CGFloat = 100.0
     public var dataSource:PieChartDataSource?
     public var delegate:PieChartDelegate?
+    public var legend:PieChartLegendView?
     
     var startPieAngle:CGFloat = 0.0
     var animationTime:NSTimeInterval = 1
@@ -44,14 +45,15 @@ public class PieChartView: UIView {
             self.pieView.layer.cornerRadius = pieRadius
         }
     }
-    var showLabel:Bool = true
-    var labelFont:UIFont = UIFont.systemFontOfSize(kPieChartFontSize)
-    var labelColor:UIColor = UIColor.whiteColor()
+    public var showLabel:Bool = true
+    public var showText:Bool = true
+    public var labelFont:UIFont = UIFont.systemFontOfSize(kPieChartFontSize)
+    public var labelColor:UIColor = UIColor.whiteColor()
     var labelShadowColor:UIColor?
     var labelRadius:CGFloat = 0.0
     var selectedSliceStroke:CGFloat = 3.0
     var selectedSliceOffsetRadius:CGFloat = 0.0
-    var showPercentage:Bool = true {
+    public var showPercentage:Bool = true {
         didSet(newShowPercentage) {
             self.showPercentage = newShowPercentage
             for layer in self.pieView.layer.sublayers {
@@ -303,6 +305,9 @@ public class PieChartView: UIView {
             CATransaction.setDisableActions(false)
             CATransaction.commit()
         }
+        if let legend = self.legend {
+            legend.reloadData()
+        }
     }
     
     // MARK: - Animation Delegate + Run Loop Timer
@@ -494,7 +499,7 @@ public class PieChartView: UIView {
         var textLayer:CATextLayer = CATextLayer()
         textLayer.contentsScale = UIScreen.mainScreen().scale
         
-        var font:UIFont = UIFont.systemFontOfSize(kPieChartFontSize)
+        var font:UIFont = self.labelFont
         textLayer.font = font
         textLayer.fontSize = kPieChartFontSize
         textLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -529,17 +534,23 @@ public class PieChartView: UIView {
         if (!showLabel) {
             return
         }
-        var label:String
+        var label:String = ""
         let doubleToWrite = Double(pieSliceLayer.percentage*100.0)
-        if (showPercentage) {
-            label = String(format: "%.2f%", doubleToWrite) + "%"
-        } else {
-            label = pieSliceLayer.text.isEmpty ? String(format: "%.2f", doubleToWrite) + "%" : pieSliceLayer.text
+        if (showPercentage && showText) { // show both
+            if (pieSliceLayer.text.isEmpty) {
+                label = String(format: "%.2f%", doubleToWrite)
+            } else {
+                label = String(format: "%@\n %.2f%",pieSliceLayer.text, doubleToWrite)
+            }
+        } else if (showPercentage) { // show only percentage
+            label = String(format: "%.2f", doubleToWrite)
+        } else if (showText) { // show only text
+            label = pieSliceLayer.text.isEmpty ? String(format: "%.2f%", doubleToWrite) : pieSliceLayer.text
         }
-        var size:CGSize = NSString(string: label).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(kPieChartFontSize)])
+        var size:CGSize = NSString(string: label).sizeWithAttributes([NSFontAttributeName : self.labelFont, NSForegroundColorAttributeName : self.labelColor])
         
         CATransaction.setDisableActions(true)
-        if (value <= 0.0 || (CGFloat(M_PI) * 2.0 * labelRadius * pieSliceLayer.percentage < max(size.width,size.height))) {
+        if (value <= 0.0 /*|| (CGFloat(M_PI) * 2.0 * labelRadius * pieSliceLayer.percentage < max(size.width,size.height))*/) {
             textLayer.string = ""
         } else {
             textLayer.string = label
@@ -547,6 +558,40 @@ public class PieChartView: UIView {
         }
         
         CATransaction.setDisableActions(false)
+    }
+    
+    // MARK: tableview data source
+    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let dataSource = self.dataSource {
+            return dataSource.numberOfSlicesInPieChart(self)
+        } else {
+            return 0
+        }
+    }
+    
+    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var text = ""
+        var color = UIColor.blackColor()
+        if let dataSource = self.dataSource {
+            let textString = dataSource.textForSlice!(self, index: indexPath.row)
+            text = textString
+            color = dataSource.colorForSlice!(self, index: indexPath.row)
+        }
+        
+        var cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell")
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        cell.textLabel.text = text
+        cell.textLabel.textColor = color
+        return cell
+    }
+    
+    public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        var num = 0
+        if let dataSource = self.dataSource {
+            num = dataSource.numberOfSlicesInPieChart(self)
+        }
+        return tableView.frame.size.height / CGFloat(num)
+
     }
     
 }
