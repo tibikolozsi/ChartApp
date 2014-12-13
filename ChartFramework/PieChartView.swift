@@ -102,7 +102,7 @@ public class PieChartView: UIView, UITableViewDataSource, UITableViewDelegate {
     class func createArc(center: CGPoint, radius: CGFloat, startAngle: CGFloat, endAngle: CGFloat) -> CGPathRef {
 //        println("createArc startAngle: \(startAngle) endAngle: \(endAngle)")
         var path = UIBezierPath()
-        path.lineWidth = 0.0
+        path.lineWidth = 1.0
         path.moveToPoint(center)
         path.addArcWithCenter(center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         path.closePath()
@@ -274,7 +274,6 @@ public class PieChartView: UIView, UITableViewDataSource, UITableViewDelegate {
                     color = UIColor(hue:hue, saturation: saturation, brightness: brightness, alpha: 1.0)
                 }
                 layer?.fillColor = color.CGColor
-//                layer?.strokeColor = color.CGColor
                 if let text = dataSource.textForSlice?(self, index: index) {
                     layer?.text = text
                 }
@@ -368,14 +367,14 @@ public class PieChartView: UIView, UITableViewDataSource, UITableViewDelegate {
                 let path = pieLayer.path
                 
                 if(CGPathContainsPoint(path, nil, point, false)){
-                    pieLayer.lineWidth = selectedSliceStroke
-                    pieLayer.strokeColor = UIColor.whiteColor().CGColor
-                    pieLayer.lineJoin = kCALineJoinBevel
+                        pieLayer.lineWidth = selectedSliceStroke
+                        pieLayer.strokeColor = UIColor.whiteColor().CGColor
+                        pieLayer.lineJoin = kCALineJoinBevel
                     pieLayer.zPosition = CGFloat(MAXFLOAT)
                     selectedIndex = index
                 } else {
                     pieLayer.zPosition = kDefaultSliceZOrder
-                    pieLayer.lineWidth = 0.0
+                        pieLayer.lineWidth = 0.0
                 }
             }
         }
@@ -538,14 +537,14 @@ public class PieChartView: UIView, UITableViewDataSource, UITableViewDelegate {
         let doubleToWrite = Double(pieSliceLayer.percentage*100.0)
         if (showPercentage && showText) { // show both
             if (pieSliceLayer.text.isEmpty) {
-                label = String(format: "%.2f%", doubleToWrite)
+                label = String(format: "%.2f", doubleToWrite) + "%"
             } else {
-                label = String(format: "%@\n %.2f%",pieSliceLayer.text, doubleToWrite)
+                label = String(format: "%@\n %.2f",pieSliceLayer.text, doubleToWrite) + "%"
             }
         } else if (showPercentage) { // show only percentage
-            label = String(format: "%.2f", doubleToWrite)
+            label = String(format: "%.2f", doubleToWrite) + "%"
         } else if (showText) { // show only text
-            label = pieSliceLayer.text.isEmpty ? String(format: "%.2f%", doubleToWrite) : pieSliceLayer.text
+            label = pieSliceLayer.text.isEmpty ? String(format: "%.2f", doubleToWrite) + "%" : pieSliceLayer.text
         }
         var size:CGSize = NSString(string: label).sizeWithAttributes([NSFontAttributeName : self.labelFont, NSForegroundColorAttributeName : self.labelColor])
         
@@ -580,8 +579,11 @@ public class PieChartView: UIView, UITableViewDataSource, UITableViewDelegate {
         
         var cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell")
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        cell.textLabel.text = text
-        cell.textLabel.textColor = color
+        if let textL = cell.textLabel {
+            textL.text = text
+            textL.textColor = color
+            textL.font = UIFont.systemFontOfSize(12)
+        }
         return cell
     }
     

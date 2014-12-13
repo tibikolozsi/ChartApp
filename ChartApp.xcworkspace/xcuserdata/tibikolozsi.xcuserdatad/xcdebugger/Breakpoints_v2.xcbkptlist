@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChartApp/ViewController.swift"
-            timestampString = "439077246.404596"
+            timestampString = "440151164.129985"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "loadWeatherData(_:type:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChartApp/ViewController.swift"
-            timestampString = "439077246.404596"
+            timestampString = "440151164.129985"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "loadWeatherData(_:type:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChartFramework/PieChartView.swift"
-            timestampString = "439159735.387166"
+            timestampString = "439245461.804488"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "539"
-            endingLineNumber = "539"
+            startingLineNumber = "538"
+            endingLineNumber = "538"
             landmarkName = "updateLabel(_:value:)"
             landmarkType = "5">
             <Locations>
@@ -120,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChartFramework/PieChartView.swift"
-            timestampString = "439159735.387166"
+            timestampString = "439245461.804488"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "554"
-            endingLineNumber = "554"
+            startingLineNumber = "553"
+            endingLineNumber = "553"
             landmarkName = "updateLabel(_:value:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -143,36 +143,6 @@
             endingLineNumber = "22"
             landmarkName = "init(frame:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartApp.PieChartLegendCell.init (ChartApp.PieChartLegendCell.Type)(frame : C.CGRect) -&gt; ChartApp.PieChartLegendCell"
-                  moduleName = "ChartApp"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.138961"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21"
-                  offsetFromSymbolStart = "55">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartFramework.PieChartLegendCell.init (ChartFramework.PieChartLegendCell.Type)(frame : C.CGRect) -&gt; ChartFramework.PieChartLegendCell"
-                  moduleName = "ChartFramework"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.192971"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21"
-                  offsetFromSymbolStart = "55">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -189,36 +159,6 @@
             endingLineNumber = "26"
             landmarkName = "init(style:reuseIdentifier:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartApp.PieChartLegendCell.init (ChartApp.PieChartLegendCell.Type)(style : C.UITableViewCellStyle, reuseIdentifier : Swift.Optional&lt;Swift.String&gt;) -&gt; ChartApp.PieChartLegendCell"
-                  moduleName = "ChartApp"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.140096"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "65">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartFramework.PieChartLegendCell.init (ChartFramework.PieChartLegendCell.Type)(style : C.UITableViewCellStyle, reuseIdentifier : Swift.Optional&lt;Swift.String&gt;) -&gt; ChartFramework.PieChartLegendCell"
-                  moduleName = "ChartFramework"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.193713"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "25"
-                  endingLineNumber = "25"
-                  offsetFromSymbolStart = "65">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -235,36 +175,6 @@
             endingLineNumber = "18"
             landmarkName = "init(coder:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartApp.PieChartLegendCell.init (ChartApp.PieChartLegendCell.Type)(coder : ObjectiveC.NSCoder) -&gt; ChartApp.PieChartLegendCell"
-                  moduleName = "ChartApp"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.146048"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "17"
-                  endingLineNumber = "17"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartFramework.PieChartLegendCell.init (ChartFramework.PieChartLegendCell.Type)(coder : ObjectiveC.NSCoder) -&gt; ChartFramework.PieChartLegendCell"
-                  moduleName = "ChartFramework"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.194304"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "17"
-                  endingLineNumber = "17"
-                  offsetFromSymbolStart = "20">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -281,36 +191,102 @@
             endingLineNumber = "14"
             landmarkName = "init()"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartApp.PieChartLegendCell.init (ChartApp.PieChartLegendCell.Type)() -&gt; ChartApp.PieChartLegendCell"
-                  moduleName = "ChartApp"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.172874"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "13"
-                  endingLineNumber = "13"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChartFramework.PieChartLegendCell.init (ChartFramework.PieChartLegendCell.Type)() -&gt; ChartFramework.PieChartLegendCell"
-                  moduleName = "ChartFramework"
-                  urlString = "file:///Users/tibikolozsi/Projects/iOS/ChartApp/ChartFramework/PieChartLegendCell.swift"
-                  timestampString = "439157133.19489"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "13"
-                  endingLineNumber = "13"
-                  offsetFromSymbolStart = "12">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChartFramework/PieChartView.swift"
+            timestampString = "439245461.804488"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "370"
+            endingLineNumber = "370"
+            landmarkName = "getCurrentSelectedOnTouch(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChartFramework/PieChartView.swift"
+            timestampString = "439245461.804488"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "377"
+            endingLineNumber = "377"
+            landmarkName = "getCurrentSelectedOnTouch(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChartApp/PieChartViewController.swift"
+            timestampString = "439246249.606712"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "segmentedControlValueChanged(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChartApp/ChartsCollectionViewController.swift"
+            timestampString = "440150539.682862"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "numberOfSlicesInPieChart(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChartApp/ChartsCollectionViewController.swift"
+            timestampString = "440150539.682862"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "valueForSlice(_:index:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChartApp/ViewController.swift"
+            timestampString = "440151427.008428"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "changeLineTypeButtonTouched(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -81,10 +81,10 @@ class ViewController: UIViewController, UIScrollViewDelegate, LineChartDataSourc
     @IBAction func changeLineTypeButtonTouched(sender: AnyObject) {
         if self.lineChartView.lineType == LineType.LineTypeSimple {
              self.lineChartView.lineType = LineType.LineTypeSpline
-            changeLineTypeButton.title = kBezierCurveString
+            changeLineTypeButton.title = kSimpleLineString
         } else if self.lineChartView.lineType == LineType.LineTypeSpline {
             self.lineChartView.lineType = LineType.LineTypeSimple
-            changeLineTypeButton.title = kSimpleLineString
+            changeLineTypeButton.title = kBezierCurveString
         }
     }
     @IBAction func addNewPointToLine(sender: AnyObject) {
@@ -118,14 +118,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, LineChartDataSourc
     
     func lineChartTextForData(lineChart: LineChartView, index: Int) -> String {
         var current = self.data[index]
-        if (true) {
-            let dateFormatter = NSDateFormatter()
-
-            return current.dateString
-        } else {
-            return "0.0"
-        }
-//        return String(format: "%f",self.values[index])
+        return current.dateString
     }
     
     func lineChartDotColorForData(lineChart: LineChartView, index: Int) -> UIColor {
@@ -213,6 +206,7 @@ class ViewController: UIViewController, UIScrollViewDelegate, LineChartDataSourc
     }
     
     func choose(city: String) {
+        self.cityToFetch = city
         self.loadWeatherData(city, type: .ForecastTypeDefault)
     }
     
